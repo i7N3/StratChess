@@ -25,9 +25,7 @@ public class Main {
             text += y + 1;
             text += " | ";
             for (int x = 0; x < 8; x++)
-            {
                 text += "" + chess.GetFigureAt(x, y) + " ";
-            }
 
             text += "|\n";
         }

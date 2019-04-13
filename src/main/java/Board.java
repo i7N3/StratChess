@@ -27,24 +27,41 @@ public class Board {
         moveColor = parts[1] == "b" ? Color.black : Color.white;
         moveNumber = Integer.parseInt(parts[5]);
 
-        SetFigureAt(new Square("a1"), Figure.whiteKing);
-        SetFigureAt(new Square("h8"), Figure.blackKing);
-
-        moveColor = Color.white;
+        // SetFigureAt(new Square("a1"), Figure.whiteKing);
+        // SetFigureAt(new Square("h8"), Figure.blackKing);
+        // moveColor = Color.white;
     }
 
     void InitFigures(String data)
     {
-        String newData = data;
-
         for (int j = 8; j >= 2; j--)
-            newData = newData.replaceAll(Integer.toString(j), (j - 1) + "1");
+            data = data.replaceAll(Integer.toString(j), (j - 1) + "1");
 
-        String[] lines = newData.split("/");
+        String[] lines = data.split("/");
 
         for (int y = 7; y >= 0; y--)
             for (int x = 0; x < 8; x++)
                 this.figures[x][y] = Figure.getFigureType(lines[7 - y].charAt(x));
+    }
+
+    void GenerateFen()
+    {
+        this.fen = FenFigures() + " " +
+                (moveColor == Color.white ? "w" : "b") +
+                " - - 0 " + moveNumber;
+    }
+
+    String FenFigures()
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int y = 7; y >= 0; y--)
+        {
+            for (int x = 0; x < 8; x++)
+                sb.append(figures[x][y] == Figure.none ? '1' : figures[x][y].figure);
+            if (y > 0)
+                sb.append("/");
+        }
+        return sb.toString();
     }
 
     public Figure GetFigureAt(Square square)
@@ -71,6 +88,7 @@ public class Board {
             next.moveNumber++;
 
         next.moveColor = moveColor.FlipColor(moveColor);
+        next.GenerateFen();
         return next;
     }
 }
