@@ -18,11 +18,16 @@ public enum Figure {
 
     char figure;
 
+    Figure() { this.figure = '.'; }
     Figure(char figure) {
         this.figure = figure;
     }
 
-    Figure() {
-        this.figure = '.';
+    static Figure getFigureType(char figure)
+    {
+        for(Figure f : Figure.values())
+            if(f.figure == figure) return f;
+
+        return Figure.none;
     }
 }

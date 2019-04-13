@@ -17,10 +17,34 @@ public class Board {
 
     void Init()
     {
+        // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        //  0                                           1 2    3 4 5
+
+        String[] parts = fen.split(" ");
+        if (parts.length != 6) return;
+
+        InitFigures(parts[0]);
+        moveColor = parts[1] == "b" ? Color.black : Color.white;
+        moveNumber = Integer.parseInt(parts[5]);
+
         SetFigureAt(new Square("a1"), Figure.whiteKing);
         SetFigureAt(new Square("h8"), Figure.blackKing);
 
         moveColor = Color.white;
+    }
+
+    void InitFigures(String data)
+    {
+        String newData = data;
+
+        for (int j = 8; j >= 2; j--)
+            newData = newData.replaceAll(Integer.toString(j), (j - 1) + "1");
+
+        String[] lines = newData.split("/");
+
+        for (int y = 7; y >= 0; y--)
+            for (int x = 0; x < 8; x++)
+                this.figures[x][y] = Figure.getFigureType(lines[7 - y].charAt(x));
     }
 
     public Figure GetFigureAt(Square square)
