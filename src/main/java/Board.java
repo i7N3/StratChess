@@ -61,7 +61,14 @@ public class Board {
             if (y > 0)
                 sb.append("/");
         }
-        return sb.toString();
+
+        String eight = "11111111";
+        String resultFen = sb.toString();
+
+        for (int j = 8; j >= 2; j--)
+            resultFen = resultFen.replaceAll(eight.substring(0, j), Integer.toString(j));
+
+        return resultFen;
     }
 
     public Figure GetFigureAt(Square square)
