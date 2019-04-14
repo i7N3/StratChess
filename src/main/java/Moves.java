@@ -19,4 +19,17 @@ public class Moves {
         return  fm.from.OnBoard() &&
                 Figure.GetColor(fm.figure) == board.moveColor;
     }
+
+    boolean CanMoveTo()
+    {
+        Figure figure = board.GetFigureAt(fm.to);
+
+        return  fm.to.OnBoard() &&
+                figure.GetColor(figure) != board.moveColor;
+    }
+
+    boolean CanFigureMove()
+    {
+        return true;
+    }
 }
