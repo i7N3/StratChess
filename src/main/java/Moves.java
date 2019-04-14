@@ -25,6 +25,7 @@ public class Moves {
         Figure figure = board.GetFigureAt(fm.to);
 
         return  fm.to.OnBoard() &&
+                fm.from != fm.to &&
                 figure.GetColor(figure) != board.moveColor;
     }
 
