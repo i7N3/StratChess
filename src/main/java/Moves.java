@@ -30,6 +30,65 @@ public class Moves {
 
     boolean CanFigureMove()
     {
+        switch (fm.figure)
+        {
+            case whiteKing:
+            case blackKing:
+                return CanKingMove();
+
+            case whiteQueen:
+            case blackQueen:
+                return CanQueenMove();
+
+            case whiteRook:
+            case blackRook:
+                return CanRookMove();
+
+            case whiteBishop:
+            case blackBishop:
+                return CanBishopMove();
+
+            case whiteKnight:
+            case blackKnight:
+                return CanKnightMove();
+
+            case whitePawn:
+            case blackPawn:
+                return CanPawnMove();
+
+            default: return false;
+        }
+    }
+
+    private boolean CanKingMove()
+    {
+        if (fm.AbsDeltaX() <= 1 && fm.AbsDeltaY() <= 1)
+            return true;
+        return false;
+    }
+
+    private boolean CanKnightMove()
+    {
+        return true;
+    }
+
+    private boolean CanBishopMove()
+    {
+        return true;
+    }
+
+    private boolean CanRookMove()
+    {
+        return true;
+    }
+
+    private boolean CanQueenMove()
+    {
+        return true;
+    }
+
+    private boolean CanPawnMove()
+    {
         return true;
     }
 }

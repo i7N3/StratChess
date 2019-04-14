@@ -51,6 +51,48 @@ public class FigureMoving {
                 }
             }
         }
+    }
 
+    public int DeltaX;
+    public int DeltaY;
+
+    public int GetDeltaX()
+    {
+        return to.x - from.x;
+    }
+    public int GetDeltaY()
+    {
+        return to.y - from.y;
+    }
+
+    public int AbsDeltaX()
+    {
+        return Math.abs(DeltaX);
+    }
+    public int AbsDeltaY()
+    {
+        return Math.abs(DeltaY);
+    }
+
+    // Sign: + or - or 0
+    public int SignX()
+    {
+        if (this.DeltaX == 0)
+            return 0;
+
+        if (this.DeltaX > 0)
+            return 1;
+        else
+            return -1;
+    }
+    public int SignY()
+    {
+        if (this.DeltaY == 0)
+            return 0;
+
+        if (this.DeltaY > 0)
+            return 1;
+        else
+            return -1;
     }
 }

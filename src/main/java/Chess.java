@@ -31,7 +31,7 @@ public class Chess {
     public Chess Move(String move)
     {
         FigureMoving fm = new FigureMoving(move);
-
+        
         if (!moves.CanMove(fm))
             return this;
 
