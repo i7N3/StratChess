@@ -30,4 +30,19 @@ public enum Figure {
 
         return Figure.none;
     }
+
+    static Color GetColor(Figure figure)
+    {
+        if (figure == Figure.none)
+            return Color.none;
+
+        return (figure == Figure.whitePawn ||
+                figure == Figure.whiteKing ||
+                figure == Figure.whiteRook ||
+                figure == Figure.whiteQueen ||
+                figure == Figure.whiteBishop ||
+                figure == Figure.whiteKnight)
+            ? Color.white
+            : Color.black;
+    }
 }
