@@ -17,7 +17,7 @@ public class Moves {
     boolean CanMoveFrom()
     {
         return  fm.from.OnBoard() &&
-                Figure.GetColor(fm.figure) == board.moveColor;
+                Figure.GetColor(fm.figure).name() == board.moveColor.name();
     }
 
     boolean CanMoveTo()
@@ -25,8 +25,8 @@ public class Moves {
         Figure figure = board.GetFigureAt(fm.to);
 
         return  fm.to.OnBoard() &&
-                fm.from != fm.to &&
-                figure.GetColor(figure) != board.moveColor;
+                fm.from.x != fm.to.x || fm.from.y != fm.to.y &&
+                figure.GetColor(figure).name() != board.moveColor.name();
     }
 
     boolean CanFigureMove()
