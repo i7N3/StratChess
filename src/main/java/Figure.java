@@ -33,15 +33,15 @@ public enum Figure {
 
     static Color GetColor(Figure figure)
     {
-        if (figure == Figure.none)
+        if (figure.figure == Figure.none.figure)
             return Color.none;
 
-        return (figure == Figure.whitePawn ||
-                figure == Figure.whiteKing ||
-                figure == Figure.whiteRook ||
-                figure == Figure.whiteQueen ||
-                figure == Figure.whiteBishop ||
-                figure == Figure.whiteKnight)
+        return (figure.figure == Figure.whitePawn.figure ||
+                figure.figure == Figure.whiteKing.figure ||
+                figure.figure == Figure.whiteRook.figure ||
+                figure.figure == Figure.whiteQueen.figure ||
+                figure.figure == Figure.whiteBishop.figure ||
+                figure.figure == Figure.whiteKnight.figure)
             ? Color.white
             : Color.black;
     }
