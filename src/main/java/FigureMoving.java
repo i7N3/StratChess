@@ -30,9 +30,7 @@ public class FigureMoving {
         for (Figure f : Figure.values())
         {
             if (move.charAt(0) == f.figure)
-            {
                 this.figure = f;
-            }
         }
 
         this.from = new Square(move.substring(1, 3)); // Pe2e4 => e2
@@ -42,13 +40,9 @@ public class FigureMoving {
             for (Figure f : Figure.values())
             {
                 if (move.charAt(5) == f.figure)
-                {
                     this.promotion = f;
-                }
                 else
-                {
                     this.promotion = Figure.none;
-                }
             }
         }
     }
