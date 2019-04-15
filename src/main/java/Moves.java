@@ -70,7 +70,9 @@ public class Moves {
 
     private boolean CanKnightMove()
     {
-        return true;
+        if (fm.AbsDeltaX() == 1 && fm.AbsDeltaY() == 2) return true;
+        if (fm.AbsDeltaX() == 2 && fm.AbsDeltaY() == 1) return true;
+        return false;
     }
 
     private boolean CanBishopMove()
