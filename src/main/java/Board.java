@@ -26,10 +26,6 @@ public class Board {
         InitFigures(parts[0]);
         moveColor = parts[1] == "b" ? Color.black : Color.white;
         moveNumber = Integer.parseInt(parts[5]);
-
-        // SetFigureAt(new Square("a1"), Figure.whiteKing);
-        // SetFigureAt(new Square("h8"), Figure.blackKing);
-        // moveColor = Color.white;
     }
 
     void InitFigures(String data)
@@ -47,7 +43,7 @@ public class Board {
     void GenerateFen()
     {
         this.fen = FenFigures() + " " +
-                (moveColor == Color.white ? "w" : "b") +
+                (moveColor.name() == Color.white.name() ? "w" : "b") +
                 " - - 0 " + moveNumber;
     }
 
@@ -88,10 +84,9 @@ public class Board {
     {
         Board next = new Board(fen);
         next.SetFigureAt(fm.from, Figure.none);
-        next.SetFigureAt(fm.to, fm.promotion == Figure.none ? fm.figure : fm.promotion);
+        next.SetFigureAt(fm.to, fm.promotion.figure == Figure.none.figure ? fm.figure : fm.promotion);
 
-        // Check this
-        if(moveColor == Color.black)
+        if(moveColor.name() == Color.black.name())
             next.moveNumber++;
 
         next.moveColor = moveColor.FlipColor(moveColor);
