@@ -39,7 +39,7 @@ public class Moves {
 
             case whiteQueen:
             case blackQueen:
-                return CanQueenMove();
+                return CanStraightMove();
 
             case whiteRook:
             case blackRook:
@@ -72,6 +72,22 @@ public class Moves {
     {
         if (fm.AbsDeltaX() == 1 && fm.AbsDeltaY() == 2) return true;
         if (fm.AbsDeltaX() == 2 && fm.AbsDeltaY() == 1) return true;
+        return false;
+    }
+
+    private boolean CanStraightMove()
+    {
+        Square at = fm.from;
+
+        do
+        {
+            at = new Square(at.x + fm.SignX(), at.y + fm.SignY());
+            if ((at.x  == fm.to.x) && (at.y == fm.to.y)) return true;
+        } while
+        (
+            at.OnBoard() &&
+            board.GetFigureAt(at).figure == Figure.none.figure
+        );
         return false;
     }
 
