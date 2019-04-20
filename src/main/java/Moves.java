@@ -35,6 +35,7 @@ public class Moves {
         {
             case whiteKing:
             case blackKing:
+                // TODO: Castling
                 return CanKingMove();
 
             case whiteQueen:
