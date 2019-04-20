@@ -93,26 +93,11 @@ public class Moves {
         return false;
     }
 
-    private boolean CanBishopMove()
-    {
-        return true;
-    }
-
-    private boolean CanRookMove()
-    {
-        return true;
-    }
-
-    private boolean CanQueenMove()
-    {
-        return true;
-    }
-
     private boolean CanPawnGo(int stepY)
     {
         if (board.GetFigureAt(fm.to).figure == Figure.none.figure)
             if (fm.DeltaX() == 0)
-                if  (fm.DeltaY() == stepY)
+                if (fm.DeltaY() == stepY)
                     return true;
         return false;
     }
@@ -142,8 +127,9 @@ public class Moves {
         if (fm.from.y < 1 || fm.from.y > 6) return false;
         int stepY = Figure.GetColor(fm.figure).name() == Color.white.name() ? 1 : -1;
         return
-            CanPawnGo(stepY) &&
-            CanPawnJump(stepY) &&
+            CanPawnGo(stepY) ||
+            CanPawnJump(stepY) ||
             CanPawnEat(stepY);
+            // TODO: En passant
     }
 }

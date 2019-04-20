@@ -59,10 +59,7 @@ public class FigureMoving {
         return to.y - from.y;
     }
 
-    public int AbsDeltaX()
-    {
-        return Math.abs(DeltaX());
-    }
+    public int AbsDeltaX() { return Math.abs(DeltaX()); }
     public int AbsDeltaY()
     {
         return Math.abs(DeltaY());
