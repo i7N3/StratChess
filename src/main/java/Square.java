@@ -1,17 +1,19 @@
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 public class Square {
     @Getter @Setter public int x;
     @Getter @Setter public int y;
 
-    public Square(int x, int y)
+    public Square (int x, int y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public Square(String e2)
+    public Square (String e2)
     {
         if (e2.length() == 2 &&
             e2.charAt(0) >= 'a' && e2.charAt(0) <= 'h' &&
@@ -28,13 +30,23 @@ public class Square {
         }
     }
 
-    public boolean OnBoard()
+    static public ArrayList<Square> YieldSquares ()
+    {
+        ArrayList<Square> yieldSquares = new ArrayList<>();
+        for (int y = 0; y < 8; y++)
+            for (int x = 0; x < 8; x++)
+                yieldSquares.add(new Square(x, y));
+        return yieldSquares;
+    }
+
+
+    public boolean OnBoard ()
     {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 
     // Check this
-    public String GetName()
+    public String GetName ()
     {
         return ((char)('a' + x)) + Integer.toString((y + 1));
     }

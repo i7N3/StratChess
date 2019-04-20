@@ -47,9 +47,6 @@ public class FigureMoving {
         }
     }
 
-    //public int DeltaX;
-    //public int DeltaY;
-
     public int DeltaX()
     {
         return to.x - from.x;
@@ -65,11 +62,9 @@ public class FigureMoving {
         return Math.abs(DeltaY());
     }
 
-    // Sign: + or - or 0
     public int SignX()
     {
-        if (this.DeltaX() == 0)
-            return 0;
+        if (this.DeltaX() == 0) return 0;
 
         if (this.DeltaX() > 0)
             return 1;
@@ -78,8 +73,7 @@ public class FigureMoving {
     }
     public int SignY()
     {
-        if (this.DeltaY() == 0)
-            return 0;
+        if (this.DeltaY() == 0) return 0;
 
         if (this.DeltaY() > 0)
             return 1;
@@ -90,10 +84,9 @@ public class FigureMoving {
     // Check this
     public String toString() {
         String text = figure.figure + from.GetName() + to.GetName();
+
         if (promotion.figure != Figure.none.figure)
-        {
             text += promotion.figure;
-        }
 
         return text;
     }
