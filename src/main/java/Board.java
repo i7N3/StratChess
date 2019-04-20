@@ -93,4 +93,6 @@ public class Board {
         next.GenerateFen();
         return next;
     }
+
+    // TODO: IsCheck()
 }

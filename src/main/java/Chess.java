@@ -6,6 +6,7 @@ public class Chess {
     @Getter @Setter public String fen;
     Board board;
     Moves moves;
+    // TODO: List<FigureMoving> allMoves;
 
     public Chess()
     {
@@ -55,4 +56,6 @@ public class Chess {
 
         return result;
     }
+
+    // TODO: FindAllMoves();
 }
