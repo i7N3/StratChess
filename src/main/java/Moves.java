@@ -43,11 +43,13 @@ public class Moves {
 
             case whiteRook:
             case blackRook:
-                return CanRookMove();
+                return (fm.SignX() == 0 || fm.SignY() == 0) &&
+                        CanStraightMove();
 
             case whiteBishop:
             case blackBishop:
-                return CanBishopMove();
+                return (fm.SignX() != 0 && fm.SignY() != 0) &&
+                        CanStraightMove();
 
             case whiteKnight:
             case blackKnight:
@@ -106,8 +108,42 @@ public class Moves {
         return true;
     }
 
+    private boolean CanPawnGo(int stepY)
+    {
+        if (board.GetFigureAt(fm.to).figure == Figure.none.figure)
+            if (fm.DeltaX() == 0)
+                if  (fm.DeltaY() == stepY)
+                    return true;
+        return false;
+    }
+
+    private boolean CanPawnJump(int stepY)
+    {
+        if (board.GetFigureAt(fm.to).figure == Figure.none.figure)
+            if (fm.DeltaX() == 0)
+                if (fm.DeltaY() == 2 * stepY)
+                    if (fm.from.y == 1 || fm.from.y == 6)
+                        if (board.GetFigureAt(new Square(fm.from.x, fm.from.y + stepY)).figure == Figure.none.figure)
+                            return true;
+        return false;
+    }
+
+    private boolean CanPawnEat(int stepY)
+    {
+        if (board.GetFigureAt(fm.to).figure != Figure.none.figure)
+            if (fm.AbsDeltaX() == 1)
+                if (fm.DeltaY() == stepY)
+                    return true;
+        return false;
+    }
+
     private boolean CanPawnMove()
     {
-        return true;
+        if (fm.from.y < 1 || fm.from.y > 6) return false;
+        int stepY = Figure.GetColor(fm.figure).name() == Color.white.name() ? 1 : -1;
+        return
+            CanPawnGo(stepY) &&
+            CanPawnJump(stepY) &&
+            CanPawnEat(stepY);
     }
 }

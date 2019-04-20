@@ -89,4 +89,15 @@ public class FigureMoving {
         else
             return -1;
     }
+
+    // Check this
+    public String toString() {
+        String text = figure.figure + from.GetName() + to.GetName();
+        if (promotion.figure != Figure.none.figure)
+        {
+            text += promotion.figure;
+        }
+
+        return text;
+    }
 }
