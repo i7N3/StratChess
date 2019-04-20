@@ -24,9 +24,12 @@ public class Moves {
     {
         Figure figure = board.GetFigureAt(fm.to);
 
-        return  fm.to.OnBoard() &&
-                fm.from.x != fm.to.x || fm.from.y != fm.to.y &&
-                figure.GetColor(figure).name() != board.moveColor.name();
+        return
+        (
+            fm.to.OnBoard() &&
+            ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
+            (Figure.GetColor(figure).name() != board.moveColor.name())
+        );
     }
 
     boolean CanFigureMove ()
@@ -85,14 +88,7 @@ public class Moves {
         do
         {
             at = new Square(at.x + fm.SignX(), at.y + fm.SignY());
-
-            if
-            (
-                at.x  == fm.to.x &&
-                at.y == fm.to.y &&
-                Figure.GetColor(Board.GetFigureAt(fm.from)).name()
-                != Figure.GetColor(Board.GetFigureAt(at)).name()
-            )
+            if (at.x  == fm.to.x && at.y == fm.to.y)
                 return true;
         } while
         (

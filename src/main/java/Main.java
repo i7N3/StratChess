@@ -12,8 +12,8 @@ public class Main {
             System.out.println(ChessToAscii(chess));
 
             for (String moves : chess.GetAllMoves())
-                System.out.print(moves + "\n");
-            System.out.print("\n> ");
+                System.out.print(moves + " ");
+            System.out.println();
 
             String move = scanner.nextLine();
             if (move == "") break;
