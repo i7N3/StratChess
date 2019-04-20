@@ -5,28 +5,37 @@ public class Chess {
 
     @Getter @Setter public String fen;
     Board board;
+    Moves moves;
+    // TODO: List<FigureMoving> allMoves;
 
     public Chess()
     {
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         board = new Board(fen);
+        moves = new Moves(board);
     }
 
     public Chess(String fen)
     {
         this.fen = fen;
         board = new Board(fen);
+        moves = new Moves(board);
     }
 
     public Chess(Board board)
     {
         this.board = board;
         this.fen = board.fen;
+        moves = new Moves(board);
     }
 
     public Chess Move(String move)
     {
         FigureMoving fm = new FigureMoving(move);
+        
+        if (!moves.CanMove(fm))
+            return this;
+
         Board nextBoard = board.Move(fm);
         Chess nextChess = new Chess(nextBoard);
         return nextChess;
@@ -47,4 +56,6 @@ public class Chess {
 
         return result;
     }
+
+    // TODO: FindAllMoves();
 }
