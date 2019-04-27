@@ -1,18 +1,30 @@
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 public class Board {
 
     @Getter @Setter String fen;
     @Getter @Setter public Color moveColor;
     @Getter @Setter int moveNumber;
-    Figure[][] figures;
+    static Figure[][] figures;
 
     public Board(String fen)
     {
         this.fen = fen;
         this.figures = new Figure[8][8];
         Init();
+    }
+
+    public ArrayList<FigureOnSquare> YieldFigures()
+    {
+        ArrayList<FigureOnSquare> yieldFigures = new ArrayList<>();
+
+        for (Square square : Square.YieldSquares())
+            if (Figure.GetColor(GetFigureAt(square)).name() == moveColor.name())
+                yieldFigures.add(new FigureOnSquare(GetFigureAt(square), square));
+        return yieldFigures;
     }
 
     void Init()
@@ -67,7 +79,7 @@ public class Board {
         return resultFen;
     }
 
-    public Figure GetFigureAt(Square square)
+    static public Figure GetFigureAt(Square square)
     {
         if(square.OnBoard() && figures[square.x][square.y] instanceof Figure)
             return figures[square.x][square.y];

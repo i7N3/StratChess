@@ -3,33 +3,36 @@ public class Moves {
     FigureMoving fm;
     Board board;
 
-    public Moves(Board board)
+    public Moves (Board board)
     {
         this.board = board;
     }
 
-    public boolean CanMove(FigureMoving fm)
+    public boolean CanMove (FigureMoving fm)
     {
         this.fm = fm;
         return CanMoveFrom() && CanMoveTo() && CanFigureMove();
     }
 
-    boolean CanMoveFrom()
+    boolean CanMoveFrom ()
     {
         return  fm.from.OnBoard() &&
                 Figure.GetColor(fm.figure).name() == board.moveColor.name();
     }
 
-    boolean CanMoveTo()
+    boolean CanMoveTo ()
     {
         Figure figure = board.GetFigureAt(fm.to);
 
-        return  fm.to.OnBoard() &&
-                fm.from.x != fm.to.x || fm.from.y != fm.to.y &&
-                figure.GetColor(figure).name() != board.moveColor.name();
+        return
+        (
+            fm.to.OnBoard() &&
+            ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
+            (Figure.GetColor(figure).name() != board.moveColor.name())
+        );
     }
 
-    boolean CanFigureMove()
+    boolean CanFigureMove ()
     {
         switch (fm.figure)
         {
@@ -64,28 +67,29 @@ public class Moves {
         }
     }
 
-    private boolean CanKingMove()
+    private boolean CanKingMove ()
     {
         if (fm.AbsDeltaX() <= 1 && fm.AbsDeltaY() <= 1)
             return true;
         return false;
     }
 
-    private boolean CanKnightMove()
+    private boolean CanKnightMove ()
     {
         if (fm.AbsDeltaX() == 1 && fm.AbsDeltaY() == 2) return true;
         if (fm.AbsDeltaX() == 2 && fm.AbsDeltaY() == 1) return true;
         return false;
     }
 
-    private boolean CanStraightMove()
+    private boolean CanStraightMove ()
     {
         Square at = fm.from;
 
         do
         {
             at = new Square(at.x + fm.SignX(), at.y + fm.SignY());
-            if ((at.x  == fm.to.x) && (at.y == fm.to.y)) return true;
+            if (at.x  == fm.to.x && at.y == fm.to.y)
+                return true;
         } while
         (
             at.OnBoard() &&
@@ -94,7 +98,7 @@ public class Moves {
         return false;
     }
 
-    private boolean CanPawnGo(int stepY)
+    private boolean CanPawnGo (int stepY)
     {
         if (board.GetFigureAt(fm.to).figure == Figure.none.figure)
             if (fm.DeltaX() == 0)
@@ -103,7 +107,7 @@ public class Moves {
         return false;
     }
 
-    private boolean CanPawnJump(int stepY)
+    private boolean CanPawnJump (int stepY)
     {
         if (board.GetFigureAt(fm.to).figure == Figure.none.figure)
             if (fm.DeltaX() == 0)
@@ -114,7 +118,7 @@ public class Moves {
         return false;
     }
 
-    private boolean CanPawnEat(int stepY)
+    private boolean CanPawnEat (int stepY)
     {
         if (board.GetFigureAt(fm.to).figure != Figure.none.figure)
             if (fm.AbsDeltaX() == 1)
@@ -123,7 +127,7 @@ public class Moves {
         return false;
     }
 
-    private boolean CanPawnMove()
+    private boolean CanPawnMove ()
     {
         if (fm.from.y < 1 || fm.from.y > 6) return false;
         int stepY = Figure.GetColor(fm.figure).name() == Color.white.name() ? 1 : -1;
