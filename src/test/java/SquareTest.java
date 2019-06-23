@@ -55,8 +55,11 @@ public class SquareTest {
 
     @Test
     public void Square_ARGUMENT_LENGHT_EQUAL_2() {
-        String e2 = "e2";
-        Assert.assertTrue(e2.length() == 2);
+        Square validSquare = new Square("e2");
+        Square notValidSquare = new Square("eee");
+
+        Assert.assertTrue(validSquare.getX() != -1 && validSquare.getY() != -1);
+        Assert.assertTrue(notValidSquare.getX() == -1 && notValidSquare.getY() == -1);
     }
 
     @Test
