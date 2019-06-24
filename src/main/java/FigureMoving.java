@@ -74,6 +74,7 @@ public class FigureMoving {
         else
             return -1;
     }
+
     public int SignY()
     {
         if (this.DeltaY() == 0) return 0;
@@ -84,7 +85,6 @@ public class FigureMoving {
             return -1;
     }
 
-    // Check this
     public String toString() {
         String text = figure.figure + from.GetName() + to.GetName();
 

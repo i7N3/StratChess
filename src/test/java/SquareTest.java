@@ -66,8 +66,8 @@ public class SquareTest {
     public void Square_ARGUMENT_EQUAL_FIGURE_POSITION() {
         String a1 = "a1";
 
-        Assert.assertEquals(square.getX(), new Square(a1).getX());
-        Assert.assertEquals(square.getY(), new Square(a1).getY());
+        Assert.assertEquals(new Square(a1).getX(), square.getX());
+        Assert.assertEquals(new Square(a1).getY(), square.getY());
     }
 
     @Test

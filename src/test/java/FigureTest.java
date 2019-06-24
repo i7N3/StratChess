@@ -8,9 +8,9 @@ public class FigureTest {
 
     @Test
     public void getFigureType() {
-        Assert.assertEquals(whiteKing, Figure.whiteKing);
-        Assert.assertEquals(blackPawn, Figure.blackPawn);
-        Assert.assertEquals(none, Figure.none);
+        Assert.assertEquals(Figure.whiteKing, whiteKing);
+        Assert.assertEquals(Figure.blackPawn, blackPawn);
+        Assert.assertEquals(Figure.none, none);
     }
 
     @Test
@@ -19,8 +19,8 @@ public class FigureTest {
         Color colorBlack = Figure.GetColor(blackPawn);
         Color colorWhite = Figure.GetColor(whiteKing);
 
-        Assert.assertEquals(colorNone, Color.none);
-        Assert.assertEquals(colorBlack, Color.black);
-        Assert.assertEquals(colorWhite, Color.white);
+        Assert.assertEquals(Color.none, colorNone);
+        Assert.assertEquals(Color.black, colorBlack);
+        Assert.assertEquals(Color.white, colorWhite);
     }
 }
