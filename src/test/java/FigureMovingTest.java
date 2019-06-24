@@ -5,11 +5,11 @@ public class FigureMovingTest {
 
     private Figure whiteRook = Figure.getFigureType('R');
 
-    private Square square1 = new Square(0, 0);
-    private Square square2 = new Square(0, 7);
+    private Square from = new Square(0, 0);
+    private Square to  = new Square(0, 7);
 
-    private FigureOnSquare fs1 = new FigureOnSquare(whiteRook, square1);
-    private FigureMoving fm1 = new FigureMoving(fs1, square2);
+    private FigureOnSquare fs1 = new FigureOnSquare(whiteRook, from);
+    private FigureMoving fm1 = new FigureMoving(fs1, to);
 
     private int deltaX = fm1.DeltaX();
     private int deltaY = fm1.DeltaY();
