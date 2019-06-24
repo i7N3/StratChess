@@ -14,7 +14,7 @@ public class FigureTest {
     }
 
     @Test
-    public void GetColor() {
+    public void getColor() {
         Color colorNone = Figure.GetColor(none);
         Color colorBlack = Figure.GetColor(blackPawn);
         Color colorWhite = Figure.GetColor(whiteKing);

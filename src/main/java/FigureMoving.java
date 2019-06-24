@@ -86,7 +86,7 @@ public class FigureMoving {
     }
 
     public String toString() {
-        String text = figure.figure + from.GetName() + to.GetName();
+        String text = figure.figure + from.getName() + to.getName();
 
         if (promotion.figure != Figure.none.figure)
             text += promotion.figure;

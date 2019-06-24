@@ -30,7 +30,7 @@ public class Square {
         }
     }
 
-    static public ArrayList<Square> YieldSquares()
+    static public ArrayList<Square> yieldSquares()
     {
         ArrayList<Square> yieldSquares = new ArrayList<>();
         for (int y = 0; y < 8; y++)
@@ -39,12 +39,12 @@ public class Square {
         return yieldSquares;
     }
 
-    public boolean OnBoard()
+    public boolean onBoard()
     {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 
-    public String GetName()
+    public String getName()
     {
         return ((char)('a' + x)) + Integer.toString((y + 1));
     }

@@ -17,8 +17,8 @@ public class SquareTest {
         square = new Square(0, 0);
         Square square1 = new Square(0, 9);
 
-        onBoard = square.OnBoard();
-        notOnBoard = square1.OnBoard();
+        onBoard = square.onBoard();
+        notOnBoard = square1.onBoard();
     }
 
 
@@ -45,7 +45,7 @@ public class SquareTest {
 //    assertNotSame([String], expected, actual) – проверяет, что обе переменные относятся к разным объектам.
 
     @Test
-    public void Square() {
+    public void square() {
         try {
             new Square(1, 1);
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class SquareTest {
     }
 
     @Test
-    public void Square_ARGUMENT_LENGHT_EQUAL_2() {
+    public void square_ARGUMENT_LENGHT_EQUAL_2() {
         Square validSquare = new Square("e2");
         Square notValidSquare = new Square("eee");
 
@@ -63,7 +63,7 @@ public class SquareTest {
     }
 
     @Test
-    public void Square_ARGUMENT_EQUAL_FIGURE_POSITION() {
+    public void square_ARGUMENT_EQUAL_FIGURE_POSITION() {
         String a1 = "a1";
 
         Assert.assertEquals(new Square(a1).getX(), square.getX());
@@ -71,8 +71,8 @@ public class SquareTest {
     }
 
     @Test
-    public void YieldSquares_ARRAY_SIZE_EQUAL_64() {
-        ArrayList<Square> yieldSquares = Square.YieldSquares();
+    public void yieldSquares_ARRAY_SIZE_EQUAL_64() {
+        ArrayList<Square> yieldSquares = Square.yieldSquares();
         Assert.assertTrue(yieldSquares.size() == 64);
     }
 
@@ -83,10 +83,10 @@ public class SquareTest {
         Square square3 = new Square(7, 0);
         Square square4 = new Square(7, 7);
 
-        String expected1 = square1.GetName();
-        String expected2 = square2.GetName();
-        String expected3 = square3.GetName();
-        String expected4 = square4.GetName();
+        String expected1 = square1.getName();
+        String expected2 = square2.getName();
+        String expected3 = square3.getName();
+        String expected4 = square4.getName();
 
         String actual1 = "b1";
         String actual2 = "a8";

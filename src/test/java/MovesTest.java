@@ -17,25 +17,40 @@ public class MovesTest {
     private boolean canMove = moves.CanMove(fm);
 
     @Test
-    public void CanMove() {
+    public void canMove() {
         Assert.assertTrue("Сan we walk the white pawn on the first move from a1 to a2 must be true", canMove);
     }
 
     @Test
-    public void CanMoveFrom() {
+    public void canMoveFrom() {
         boolean canMoveFrom = moves.CanMoveFrom();
         Assert.assertTrue(canMoveFrom);
     }
 
     @Test
-    public void CanMoveTo() {
+    public void canMoveTo() {
         boolean canMoveTo = moves.CanMoveTo();
         Assert.assertTrue(canMoveTo);
     }
 
     @Test
-    public void CanFigureMove() {
-        boolean сanPawnMove = moves.CanFigureMove();
-        Assert.assertTrue("Can pawn move must be true", сanPawnMove);
+    public void canPawnGo() {
+        boolean canPawnGo = moves.CanFigureMove();
+        Assert.assertTrue("canPawnGo must be true", canPawnGo);
     }
+
+    @Test
+    public void canPawnJump() {
+        FigureOnSquare fs = new FigureOnSquare(whitePawn, from);
+        FigureMoving fm = new FigureMoving(fs, new Square(0, 3));
+
+        boolean сanPawnJump = moves.CanMove(fm);
+        Assert.assertTrue("canPawnJump must be true", сanPawnJump);
+    }
+
+    // TODO: all moves methods
+
+//    Board board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+//    Moves moves = new Moves(board);
+//    boolean canMove = moves.CanMove(fm);
 }
