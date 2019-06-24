@@ -7,13 +7,13 @@ public class Square {
     @Getter @Setter public int x;
     @Getter @Setter public int y;
 
-    public Square (int x, int y)
+    public Square(int x, int y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public Square (String e2)
+    public Square(String e2)
     {
         if (e2.length() == 2 &&
             e2.charAt(0) >= 'a' && e2.charAt(0) <= 'h' &&
@@ -30,7 +30,7 @@ public class Square {
         }
     }
 
-    static public ArrayList<Square> YieldSquares ()
+    static public ArrayList<Square> yieldSquares()
     {
         ArrayList<Square> yieldSquares = new ArrayList<>();
         for (int y = 0; y < 8; y++)
@@ -39,14 +39,12 @@ public class Square {
         return yieldSquares;
     }
 
-
-    public boolean OnBoard ()
+    public boolean onBoard()
     {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 
-    // Check this
-    public String GetName ()
+    public String getName()
     {
         return ((char)('a' + x)) + Integer.toString((y + 1));
     }

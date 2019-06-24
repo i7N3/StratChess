@@ -21,7 +21,7 @@ public class Board {
     {
         ArrayList<FigureOnSquare> yieldFigures = new ArrayList<>();
 
-        for (Square square : Square.YieldSquares())
+        for (Square square : Square.yieldSquares())
             if (Figure.GetColor(GetFigureAt(square)).name() == moveColor.name())
                 yieldFigures.add(new FigureOnSquare(GetFigureAt(square), square));
         return yieldFigures;
@@ -81,14 +81,14 @@ public class Board {
 
     static public Figure GetFigureAt(Square square)
     {
-        if(square.OnBoard() && figures[square.x][square.y] instanceof Figure)
+        if(square.onBoard() && figures[square.x][square.y] instanceof Figure)
             return figures[square.x][square.y];
         return Figure.none;
     }
 
     void SetFigureAt(Square square, Figure figure)
     {
-        if(square.OnBoard())
+        if(square.onBoard())
             figures[square.x][square.y] = figure;
     }
 
@@ -101,7 +101,7 @@ public class Board {
         if(moveColor.name() == Color.black.name())
             next.moveNumber++;
 
-        next.moveColor = moveColor.FlipColor(moveColor);
+        next.moveColor = moveColor.flipColor(moveColor);
         next.GenerateFen();
         return next;
     }

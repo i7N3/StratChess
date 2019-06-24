@@ -10,28 +10,28 @@ public class Chess {
     Moves moves;
     ArrayList<FigureMoving> allMoves;
 
-    public Chess ()
+    public Chess()
     {
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         board = new Board(fen);
         moves = new Moves(board);
     }
 
-    public Chess (String fen)
+    public Chess(String fen)
     {
         this.fen = fen;
         board = new Board(fen);
         moves = new Moves(board);
     }
 
-    public Chess (Board board)
+    public Chess(Board board)
     {
         this.board = board;
         this.fen = board.fen;
         moves = new Moves(board);
     }
 
-    public Chess Move (String move)
+    public Chess Move(String move)
     {
         FigureMoving fm = new FigureMoving(move);
         
@@ -43,7 +43,7 @@ public class Chess {
         return nextChess;
     }
 
-    public char GetFigureAt (int x, int y)
+    public char GetFigureAt(int x, int y)
     {
         Square square = new Square(x, y);
         Figure figure = board.GetFigureAt(square);
@@ -59,19 +59,19 @@ public class Chess {
         return result;
     }
 
-    void FindAllMoves ()
+    void FindAllMoves()
     {
         allMoves = new ArrayList<>();
 
         for (FigureOnSquare fs : board.YieldFigures())
-            for (Square to : Square.YieldSquares())
+            for (Square to : Square.yieldSquares())
             {
                 FigureMoving fm = new FigureMoving(fs, to);
                 if (moves.CanMove(fm)) allMoves.add(fm);
             }
     }
 
-    public ArrayList<String> GetAllMoves ()
+    public ArrayList<String> GetAllMoves()
     {
         FindAllMoves();
         ArrayList<String> list = new ArrayList<>();

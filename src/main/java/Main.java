@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+// TODO: make package cz.czu.nick.chess.algorithms
+// TODO: all methods must begin with a small letter
 public class Main {
     public static void main(String[] args) {
         Random random = new Random();
@@ -14,7 +16,7 @@ public class Main {
             list = chess.GetAllMoves();
 
             System.out.println(chess.fen);
-            System.out.println(ChessToAscii(chess));
+            System.out.println(chessToAscii(chess));
 
             for (String moves : list)
                 System.out.print(moves + " ");
@@ -28,7 +30,7 @@ public class Main {
         }
     }
 
-    static String ChessToAscii(Chess chess)
+    static String chessToAscii(Chess chess)
     {
         String text = "  +-----------------+\n";
         for (int y = 7; y >= 0; y--)
