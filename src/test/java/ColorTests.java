@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ColorTest {
+public class ColorTests {
 
     @Test
     public void flipColor_WHITE_TO_BLACK() {

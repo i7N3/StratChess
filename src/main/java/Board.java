@@ -14,20 +14,20 @@ public class Board {
     {
         this.fen = fen;
         this.figures = new Figure[8][8];
-        Init();
+        init();
     }
 
-    public ArrayList<FigureOnSquare> YieldFigures()
+    public ArrayList<FigureOnSquare> yieldFigures()
     {
         ArrayList<FigureOnSquare> yieldFigures = new ArrayList<>();
 
         for (Square square : Square.yieldSquares())
-            if (Figure.GetColor(GetFigureAt(square)).name() == moveColor.name())
-                yieldFigures.add(new FigureOnSquare(GetFigureAt(square), square));
+            if (Figure.getColor(getFigureAt(square)).name() == moveColor.name())
+                yieldFigures.add(new FigureOnSquare(getFigureAt(square), square));
         return yieldFigures;
     }
 
-    void Init()
+    void init()
     {
         // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         //  0                                           1 2    3 4 5
@@ -35,12 +35,12 @@ public class Board {
         String[] parts = fen.split(" ");
         if (parts.length != 6) return;
 
-        InitFigures(parts[0]);
+        initFigures(parts[0]);
         moveColor = parts[1] == "b" ? Color.black : Color.white;
         moveNumber = Integer.parseInt(parts[5]);
     }
 
-    void InitFigures(String data)
+    void initFigures(String data)
     {
         for (int j = 8; j >= 2; j--)
             data = data.replaceAll(Integer.toString(j), (j - 1) + "1");
@@ -52,14 +52,14 @@ public class Board {
                 this.figures[x][y] = Figure.getFigureType(lines[7 - y].charAt(x));
     }
 
-    void GenerateFen()
+    void generateFen()
     {
-        this.fen = FenFigures() + " " +
+        this.fen = fenFigures() + " " +
                 (moveColor.name() == Color.white.name() ? "w" : "b") +
                 " - - 0 " + moveNumber;
     }
 
-    String FenFigures()
+    String fenFigures()
     {
         StringBuilder sb = new StringBuilder();
         for (int y = 7; y >= 0; y--)
@@ -79,30 +79,30 @@ public class Board {
         return resultFen;
     }
 
-    static public Figure GetFigureAt(Square square)
+    static public Figure getFigureAt(Square square)
     {
         if(square.onBoard() && figures[square.x][square.y] instanceof Figure)
             return figures[square.x][square.y];
         return Figure.none;
     }
 
-    void SetFigureAt(Square square, Figure figure)
+    void setFigureAt(Square square, Figure figure)
     {
         if(square.onBoard())
             figures[square.x][square.y] = figure;
     }
 
-    public Board Move(FigureMoving fm)
+    public Board move(FigureMoving fm)
     {
         Board next = new Board(fen);
-        next.SetFigureAt(fm.from, Figure.none);
-        next.SetFigureAt(fm.to, fm.promotion.figure == Figure.none.figure ? fm.figure : fm.promotion);
+        next.setFigureAt(fm.from, Figure.none);
+        next.setFigureAt(fm.to, fm.promotion.figure == Figure.none.figure ? fm.figure : fm.promotion);
 
         if(moveColor.name() == Color.black.name())
             next.moveNumber++;
 
         next.moveColor = moveColor.flipColor(moveColor);
-        next.GenerateFen();
+        next.generateFen();
         return next;
     }
 

@@ -18,8 +18,13 @@ public enum Figure {
 
     char figure;
 
-    Figure() { this.figure = '.'; }
-    Figure(char figure) {
+    Figure()
+    {
+        this.figure = '.';
+    }
+
+    Figure(char figure)
+    {
         this.figure = figure;
     }
 
@@ -31,7 +36,7 @@ public enum Figure {
         return Figure.none;
     }
 
-    static Color GetColor(Figure figure)
+    static Color getColor(Figure figure)
     {
         if (figure.figure == Figure.none.figure)
             return Color.none;

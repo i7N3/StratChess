@@ -31,22 +31,22 @@ public class Chess {
         moves = new Moves(board);
     }
 
-    public Chess Move(String move)
+    public Chess move(String move)
     {
         FigureMoving fm = new FigureMoving(move);
         
-        if (!moves.CanMove(fm))
+        if (!moves.canMove(fm))
             return this;
 
-        Board nextBoard = board.Move(fm);
+        Board nextBoard = board.move(fm);
         Chess nextChess = new Chess(nextBoard);
         return nextChess;
     }
 
-    public char GetFigureAt(int x, int y)
+    public char getFigureAt(int x, int y)
     {
         Square square = new Square(x, y);
-        Figure figure = board.GetFigureAt(square);
+        Figure figure = board.getFigureAt(square);
 
         char result = '.';
 
@@ -59,21 +59,21 @@ public class Chess {
         return result;
     }
 
-    void FindAllMoves()
+    void findAllMoves()
     {
         allMoves = new ArrayList<>();
 
-        for (FigureOnSquare fs : board.YieldFigures())
+        for (FigureOnSquare fs : board.yieldFigures())
             for (Square to : Square.yieldSquares())
             {
                 FigureMoving fm = new FigureMoving(fs, to);
-                if (moves.CanMove(fm)) allMoves.add(fm);
+                if (moves.canMove(fm)) allMoves.add(fm);
             }
     }
 
-    public ArrayList<String> GetAllMoves()
+    public ArrayList<String> getAllMoves()
     {
-        FindAllMoves();
+        findAllMoves();
         ArrayList<String> list = new ArrayList<>();
 
         for (FigureMoving fm : allMoves)

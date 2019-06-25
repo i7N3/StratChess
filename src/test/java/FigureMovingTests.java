@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class FigureMovingTest {
+public class FigureMovingTests {
 
     private Figure whiteRook = Figure.getFigureType('R');
 
@@ -11,11 +11,11 @@ public class FigureMovingTest {
     private FigureOnSquare fs1 = new FigureOnSquare(whiteRook, from);
     private FigureMoving fm1 = new FigureMoving(fs1, to);
 
-    private int deltaX = fm1.DeltaX();
-    private int deltaY = fm1.DeltaY();
+    private int deltaX = fm1.deltaX();
+    private int deltaY = fm1.deltaY();
 
-    private int signX = fm1.SignX();
-    private int signY = fm1.SignY();
+    private int signX = fm1.signX();
+    private int signY = fm1.signY();
 
     @Test
     public void figureMoving_NOT_NULL() {

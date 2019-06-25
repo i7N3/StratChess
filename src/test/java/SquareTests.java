@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.fail;
 
-public class SquareTest {
+public class SquareTests {
 
     private boolean onBoard;
     private boolean notOnBoard;
@@ -107,7 +107,7 @@ public class SquareTest {
 
     @Test
     public void onBoard() {
-        Assert.assertTrue(onBoard);
-        Assert.assertFalse(notOnBoard);
+        Assert.assertTrue("onBoard must be TRUE", onBoard);
+        Assert.assertFalse("onBoard must be FALSE", notOnBoard);
     }
 }
