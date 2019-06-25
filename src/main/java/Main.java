@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 // TODO: make package cz.czu.nick.chess.algorithms
-// TODO: all methods must begin with a small letter
 public class Main {
     public static void main(String[] args) {
         Random random = new Random();
@@ -13,7 +12,7 @@ public class Main {
 
         while (true)
         {
-            list = chess.GetAllMoves();
+            list = chess.getAllMoves();
 
             System.out.println(chess.fen);
             System.out.println(chessToAscii(chess));
@@ -23,10 +22,15 @@ public class Main {
             System.out.println();
             String move = scanner.nextLine();
 
-            if (move.charAt(0) == 'q') break;
-            if (move.length() == 0) move = list.get(random.nextInt(list.size()));
+            if (move.length() == 0) {
+                move = list.get(random.nextInt(list.size()));
+            }
+            if (move.charAt(0) == 'q') {
+                break;
+            }
 
-            chess = chess.Move(move);
+
+            chess = chess.move(move);
         }
     }
 
@@ -38,7 +42,7 @@ public class Main {
             text += y + 1;
             text += " | ";
             for (int x = 0; x < 8; x++)
-                text += "" + chess.GetFigureAt(x, y) + " ";
+                text += "" + chess.getFigureAt(x, y) + " ";
 
             text += "|\n";
         }

@@ -1,5 +1,5 @@
-import lombok.Setter;
 import lombok.Getter;
+import lombok.Setter;
 
 public class FigureMoving {
 
@@ -47,39 +47,39 @@ public class FigureMoving {
         }
     }
 
-    public int DeltaX()
+    public int deltaX()
     {
         return to.x - from.x;
     }
-    public int DeltaY()
+    public int deltaY()
     {
         return to.y - from.y;
     }
 
-    public int AbsDeltaX()
+    public int absDeltaX()
     {
-        return Math.abs(DeltaX());
+        return Math.abs(deltaX());
     }
-    public int AbsDeltaY()
+    public int absDeltaY()
     {
-        return Math.abs(DeltaY());
+        return Math.abs(deltaY());
     }
 
-    public int SignX()
+    public int signX()
     {
-        if (this.DeltaX() == 0) return 0;
+        if (this.deltaX() == 0) return 0;
 
-        if (this.DeltaX() > 0)
+        if (this.deltaX() > 0)
             return 1;
         else
             return -1;
     }
 
-    public int SignY()
+    public int signY()
     {
-        if (this.DeltaY() == 0) return 0;
+        if (this.deltaY() == 0) return 0;
 
-        if (this.DeltaY() > 0)
+        if (this.deltaY() > 0)
             return 1;
         else
             return -1;

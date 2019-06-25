@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class FigureTest {
+public class FigureTests {
     private Figure whiteKing = Figure.getFigureType('K');
     private Figure blackPawn = Figure.getFigureType('p');
     private Figure none = Figure.getFigureType('.');
@@ -15,9 +15,9 @@ public class FigureTest {
 
     @Test
     public void getColor() {
-        Color colorNone = Figure.GetColor(none);
-        Color colorBlack = Figure.GetColor(blackPawn);
-        Color colorWhite = Figure.GetColor(whiteKing);
+        Color colorNone = Figure.getColor(none);
+        Color colorBlack = Figure.getColor(blackPawn);
+        Color colorWhite = Figure.getColor(whiteKing);
 
         Assert.assertEquals(Color.none, colorNone);
         Assert.assertEquals(Color.black, colorBlack);
