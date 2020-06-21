@@ -1,47 +1,49 @@
-package cz.czu.nick.chess.old;
+package cz.czu.nick.chess.backend.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 
-public class Chess {
+@Data
+@Entity
+public class Game extends AbstractEntity {
 
-    @Getter @Setter public String fen;
-    Board board;
-    Moves moves;
-    ArrayList<FigureMoving> allMoves;
+    public String fen;
+    public static Board board;
+    public static Moves moves;
+    public static ArrayList<FigureMoving> allMoves;
 
-    public Chess()
+    public Game()
     {
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        board = new Board(fen);
-        moves = new Moves(board);
+        this.board = new Board(fen);
+        this.moves = new Moves(board);
     }
 
-    public Chess(String fen)
+    public Game(String fen)
     {
         this.fen = fen;
-        board = new Board(fen);
-        moves = new Moves(board);
+        this.board = new Board(fen);
+        this.moves = new Moves(board);
     }
 
-    public Chess(Board board)
+    public Game(Board board)
     {
         this.board = board;
         this.fen = board.fen;
-        moves = new Moves(board);
+        this.moves = new Moves(board);
     }
 
-    public Chess move(String move)
+    public Game move(String move)
     {
         FigureMoving fm = new FigureMoving(move);
-        
+
         if (!moves.canMove(fm))
             return this;
 
         Board nextBoard = board.move(fm);
-        Chess nextChess = new Chess(nextBoard);
+        Game nextChess = new Game(nextBoard);
         return nextChess;
     }
 
