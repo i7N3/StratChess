@@ -1,4 +1,6 @@
-enum Color {
+package cz.czu.nick.chess.backend.model;
+
+public enum Color {
 
     none,
     white,

@@ -1,3 +1,5 @@
+package cz.czu.nick.chess.backend.model;
+
 public enum Figure {
 
     none(),
@@ -28,7 +30,7 @@ public enum Figure {
         this.figure = figure;
     }
 
-    static Figure getFigureType(char figure)
+    static public Figure getFigureType(char figure)
     {
         for(Figure f : Figure.values())
             if(f.figure == figure) return f;

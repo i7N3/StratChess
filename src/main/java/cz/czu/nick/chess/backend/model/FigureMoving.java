@@ -1,9 +1,13 @@
+package cz.czu.nick.chess.backend.model;
+
 import lombok.Getter;
 import lombok.Setter;
 
 public class FigureMoving {
 
-    @Getter @Setter Figure figure;
+    @Getter
+    @Setter
+    Figure figure;
     @Getter @Setter Square from;
     @Getter @Setter Square to;
 

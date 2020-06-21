@@ -1,3 +1,5 @@
+package cz.czu.nick.chess.backend.model;
+
 public class Moves {
 
     FigureMoving fm;
@@ -25,11 +27,11 @@ public class Moves {
         Figure figure = board.getFigureAt(fm.to);
 
         return
-        (
-            fm.to.onBoard() &&
-            ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
-            (Figure.getColor(figure).name() != board.moveColor.name())
-        );
+                (
+                        fm.to.onBoard() &&
+                                ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
+                                (Figure.getColor(figure).name() != board.moveColor.name())
+                );
     }
 
     boolean canFigureMove()
@@ -92,8 +94,8 @@ public class Moves {
                 return true;
         } while
         (
-            at.onBoard() &&
-            board.getFigureAt(at).figure == Figure.none.figure
+                at.onBoard() &&
+                        board.getFigureAt(at).figure == Figure.none.figure
         );
         return false;
     }
@@ -132,9 +134,9 @@ public class Moves {
         if (fm.from.y < 1 || fm.from.y > 6) return false;
         int stepY = Figure.getColor(fm.figure).name() == Color.white.name() ? 1 : -1;
         return
-            canPawnGo(stepY) ||
-            canPawnJump(stepY) ||
-            canPawnEat(stepY);
-            // TODO: En passant
+                canPawnGo(stepY) ||
+                        canPawnJump(stepY) ||
+                        canPawnEat(stepY);
+        // TODO: En passant
     }
 }

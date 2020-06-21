@@ -1,11 +1,17 @@
+package cz.czu.nick.chess.backend.model;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 
 public class Square {
-    @Getter @Setter public int x;
-    @Getter @Setter public int y;
+    @Getter
+    @Setter
+    public int x;
+    @Getter
+    @Setter
+    public int y;
 
     public Square(int x, int y)
     {
@@ -16,8 +22,8 @@ public class Square {
     public Square(String e2)
     {
         if (e2.length() == 2 &&
-            e2.charAt(0) >= 'a' && e2.charAt(0) <= 'h' &&
-            e2.charAt(1) >= '1' && e2.charAt(1) <= '8')
+                e2.charAt(0) >= 'a' && e2.charAt(0) <= 'h' &&
+                e2.charAt(1) >= '1' && e2.charAt(1) <= '8')
         {
             x = e2.charAt(0) - 'a';
             y = e2.charAt(1) - '1';

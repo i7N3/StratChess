@@ -1,14 +1,16 @@
-import lombok.Getter;
-import lombok.Setter;
+package cz.czu.nick.chess.backend.model;
 
 import java.util.ArrayList;
 
-public class Board {
+public class Board extends AbstractEntity {
 
-    @Getter @Setter String fen;
-    @Getter @Setter public Color moveColor;
-    @Getter @Setter int moveNumber;
+    public String fen;
+    public Color moveColor;
+    int moveNumber;
+
     static Figure[][] figures;
+
+    public Board() {}
 
     public Board(String fen)
     {
@@ -32,12 +34,12 @@ public class Board {
         // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         //  0                                           1 2    3 4 5
 
-        String[] parts = fen.split(" ");
+        String[] parts = this.fen.split(" ");
         if (parts.length != 6) return;
 
         initFigures(parts[0]);
-        moveColor = parts[1] == "b" ? Color.black : Color.white;
-        moveNumber = Integer.parseInt(parts[5]);
+        this.moveColor = parts[1] == "b" ? Color.black : Color.white;
+        this.moveNumber = Integer.parseInt(parts[5]);
     }
 
     void initFigures(String data)
