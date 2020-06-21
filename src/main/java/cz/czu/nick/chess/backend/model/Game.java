@@ -1,0 +1,87 @@
+package cz.czu.nick.chess.backend.model;
+
+import lombok.Data;
+
+import javax.persistence.Entity;
+import java.util.ArrayList;
+
+@Data
+@Entity
+public class Game extends AbstractEntity {
+
+    public String fen;
+    public static Board board;
+    public static Moves moves;
+    public static ArrayList<FigureMoving> allMoves;
+
+    public Game()
+    {
+        this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        this.board = new Board(fen);
+        this.moves = new Moves(board);
+    }
+
+    public Game(String fen)
+    {
+        this.fen = fen;
+        this.board = new Board(fen);
+        this.moves = new Moves(board);
+    }
+
+    public Game(Board board)
+    {
+        this.board = board;
+        this.fen = board.fen;
+        this.moves = new Moves(board);
+    }
+
+    public Game move(String move)
+    {
+        FigureMoving fm = new FigureMoving(move);
+
+        if (!moves.canMove(fm))
+            return this;
+
+        Board nextBoard = board.move(fm);
+        Game nextChess = new Game(nextBoard);
+        return nextChess;
+    }
+
+    public char getFigureAt(int x, int y)
+    {
+        Square square = new Square(x, y);
+        Figure figure = board.getFigureAt(square);
+
+        char result = '.';
+
+        for (Figure f : Figure.values())
+        {
+            if(figure.figure == f.figure)
+                result =  figure.figure;
+        }
+
+        return result;
+    }
+
+    void findAllMoves()
+    {
+        allMoves = new ArrayList<>();
+
+        for (FigureOnSquare fs : board.yieldFigures())
+            for (Square to : Square.yieldSquares())
+            {
+                FigureMoving fm = new FigureMoving(fs, to);
+                if (moves.canMove(fm)) allMoves.add(fm);
+            }
+    }
+
+    public ArrayList<String> getAllMoves()
+    {
+        findAllMoves();
+        ArrayList<String> list = new ArrayList<>();
+
+        for (FigureMoving fm : allMoves)
+            list.add(fm.toString());
+        return list;
+    }
+}
