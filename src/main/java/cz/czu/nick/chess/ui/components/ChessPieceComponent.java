@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.Image;
 import cz.czu.nick.chess.backend.model.Figure;
 
 public class ChessPieceComponent extends Div {
+
     public ChessPieceComponent(Figure figure) {
         addClassName("box");
 
@@ -33,7 +34,7 @@ public class ChessPieceComponent extends Div {
             return new Image("images/figures/white-knight.svg", "White knight");
         }
         if (figure == Figure.whiteQueen) {
-            return new Image("images/figures/white-pawn.svg", "White pawn");
+            return new Image("images/figures/white-queen.svg", "White queen");
         }
         if (figure == Figure.whiteRook) {
             return new Image("images/figures/white-rook.svg", "White rook");
