@@ -1,5 +1,7 @@
 package cz.czu.nick.chess.backend.model;
 
+import java.util.ArrayList;
+
 public enum Figure {
 
     none(),
@@ -47,5 +49,25 @@ public enum Figure {
                 figure.figure == Figure.whiteKnight.figure)
                 ? Color.white
                 : Color.black;
+    }
+
+    public ArrayList<Figure> yieldPromotions(Square to) {
+        ArrayList<Figure> promotions = new ArrayList<Figure>();
+
+        if (Figure.getFigureType(this.figure) == Figure.whitePawn && to.y == 7) {
+            promotions.add(Figure.whiteQueen);
+            promotions.add(Figure.whiteRook);
+            promotions.add(Figure.whiteBishop);
+            promotions.add(Figure.whiteKnight);
+        } else if (Figure.getFigureType(this.figure) == Figure.blackPawn && to.y == 0) {
+            promotions.add(Figure.blackQueen);
+            promotions.add(Figure.blackRook);
+            promotions.add(Figure.blackBishop);
+            promotions.add(Figure.blackKnight);
+        } else {
+            promotions.add(Figure.none);
+        }
+
+        return promotions;
     }
 }

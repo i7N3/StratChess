@@ -38,6 +38,9 @@ public class Game extends AbstractEntity {
 
         Board nextBoard = board.move(fm);
         Game nextChess = new Game(nextBoard);
+
+        System.out.println(getAllMoves());
+
         return nextChess;
     }
 
@@ -60,8 +63,12 @@ public class Game extends AbstractEntity {
 
         for (FigureOnSquare fs : board.yieldFigures())
             for (Square to : Square.yieldSquares()) {
-                FigureMoving fm = new FigureMoving(fs, to);
-                if (moves.canMove(fm)) allMoves.add(fm);
+                for (Figure promotion : fs.figure.yieldPromotions(to)) {
+                    FigureMoving fm = new FigureMoving(fs, to, promotion);
+
+                    if (moves.canMove(fm))
+                        allMoves.add(fm);
+                }
             }
     }
 

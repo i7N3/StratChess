@@ -101,7 +101,7 @@ public class BoardComponent extends Div {
         this.setSelectedFigure = Figure.none;
     }
 
-    // TODO: Update only specific dom node
+    // TODO: Update only specific dom nodes
     private void updateGame() {
         if (this.board.getElement().getChildCount() > 0) {
             this.board.getElement().removeAllChildren();
@@ -124,17 +124,6 @@ public class BoardComponent extends Div {
             }
         }
     }
-
-//    @EventHandler
-//    private void sayHello() {
-//        // Called from the template click handler
-//        String userInput = getModel().getUserInput();
-//        if (userInput == null || userInput.isEmpty()) {
-//            getModel().setGreeting(EMPTY_NAME_GREETING);
-//        } else {
-//            getModel().setGreeting(String.format("Hello %s!", userInput));
-//        }
-//    }
 
 //    @EventListener
 //    public void handleMoveEvent (MoveEvent event, @Autowired GameService gameService) {
