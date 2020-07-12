@@ -34,8 +34,7 @@ public class Moves {
         switch (fm.figure) {
             case whiteKing:
             case blackKing:
-                // TODO: Castling
-                return canKingMove();
+                return canKingMove() || canKingCastle();
 
             case whiteQueen:
             case blackQueen:
@@ -67,6 +66,64 @@ public class Moves {
     private boolean canKingMove() {
         if (fm.absDeltaX() <= 1 && fm.absDeltaY() <= 1)
             return true;
+        return false;
+    }
+
+    private boolean canKingCastle() {
+        if (fm.figure == Figure.whiteKing) {
+            Square e1 = new Square("e1");
+            Square g1 = new Square("g1");
+            Square c1 = new Square("c1");
+
+            if (fm.from.y == e1.y && fm.from.x == e1.x)
+                if (fm.to.y == g1.y && fm.to.x == g1.x)
+                    if (board.canCastleH1)
+                        if (board.getFigureAt(new Square("h1")) == Figure.whiteRook)
+                            if (board.getFigureAt(new Square("f1")) == Figure.none)
+                                if (board.getFigureAt(new Square("g1")) == Figure.none)
+                                    // if (!board.isCheck()) {}
+                                    // if (!board.isCheckAfterMove(new FigureMoving("Ke1f1"))) {}
+                                    return true;
+
+            if (fm.from.y == e1.y && fm.from.x == e1.x)
+                if (fm.to.y == c1.y && fm.to.x == c1.x)
+                    if (board.canCastleA1)
+                        if (board.getFigureAt(new Square("a1")) == Figure.whiteRook)
+                            if (board.getFigureAt(new Square("b1")) == Figure.none)
+                                if (board.getFigureAt(new Square("c1")) == Figure.none)
+                                    if (board.getFigureAt(new Square("d1")) == Figure.none)
+                                        // if (!board.isCheck()) {}
+                                        // if (!board.isCheckAfterMove(new FigureMoving("ke1d1"))) {}
+                                        return true;
+        }
+
+        if (fm.figure == Figure.blackKing) {
+            Square e8 = new Square("e8");
+            Square g8 = new Square("g8");
+            Square c8 = new Square("c8");
+
+            if (fm.from.y == e8.y && fm.from.x == e8.x)
+                if (fm.to.y == g8.y && fm.to.x == g8.x)
+                    if (board.canCastleH8)
+                        if (board.getFigureAt(new Square("h8")) == Figure.blackRook)
+                            if (board.getFigureAt(new Square("f8")) == Figure.none)
+                                if (board.getFigureAt(new Square("g8")) == Figure.none)
+                                    // if (!board.isCheck()) {}
+                                    // if (!board.isCheckAfterMove(new FigureMoving("ke8f8"))) {}
+                                    return true;
+
+            if (fm.from.y == e8.y && fm.from.x == e8.x)
+                if (fm.to.y == c8.y && fm.to.x == c8.x)
+                    if (board.canCastleA8)
+                        if (board.getFigureAt(new Square("a8")) == Figure.blackRook)
+                            if (board.getFigureAt(new Square("b8")) == Figure.none)
+                                if (board.getFigureAt(new Square("c8")) == Figure.none)
+                                    if (board.getFigureAt(new Square("d8")) == Figure.none)
+                                        // if (!board.isCheck()) {}
+                                        // if (!board.isCheckAfterMove(new FigureMoving("Ke8d8"))) {}
+                                        return true;
+        }
+
         return false;
     }
 

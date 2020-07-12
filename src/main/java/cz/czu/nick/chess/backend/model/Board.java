@@ -175,6 +175,8 @@ public class Board extends AbstractEntity {
 
         next.dropEnpassant(fm);
         next.updateEnpassant(fm);
+        next.moveCastleRook(fm);
+        next.updateCastleFlags(fm);
 
         if (moveColor == Color.black)
             next.moveNumber++;
@@ -182,6 +184,84 @@ public class Board extends AbstractEntity {
         next.moveColor = moveColor.flipColor(moveColor);
         next.generateFen();
         return next;
+    }
+
+    private void moveCastleRook(FigureMoving fm) {
+        if (fm.figure == Figure.whiteKing) {
+            Square e1 = new Square("e1");
+            Square g1 = new Square("g1");
+            Square c1 = new Square("c1");
+
+            if (fm.from.y == e1.y && fm.from.x == e1.x)
+                if (fm.to.y == g1.y && fm.to.x == g1.x) {
+                    setFigureAt(new Square("h1"), Figure.none);
+                    setFigureAt(new Square("f1"), Figure.whiteRook);
+                    return;
+                }
+
+            if (fm.from.y == e1.y && fm.from.x == e1.x)
+                if (fm.to.y == c1.y && fm.to.x == c1.x) {
+                    setFigureAt(new Square("a1"), Figure.none);
+                    setFigureAt(new Square("d1"), Figure.whiteRook);
+                    return;
+                }
+        }
+
+        if (fm.figure == Figure.blackKing) {
+            Square e8 = new Square("e8");
+            Square g8 = new Square("g8");
+            Square c8 = new Square("c8");
+
+            if (fm.from.y == e8.y && fm.from.x == e8.x)
+                if (fm.to.y == g8.y && fm.to.x == g8.x) {
+                    setFigureAt(new Square("h8"), Figure.none);
+                    setFigureAt(new Square("f8"), Figure.blackRook);
+                    return;
+                }
+
+            if (fm.from.y == e8.y && fm.from.x == e8.x)
+                if (fm.to.y == c8.y && fm.to.x == c8.x) {
+                    setFigureAt(new Square("a8"), Figure.none);
+                    setFigureAt(new Square("d8"), Figure.blackRook);
+                    return;
+                }
+        }
+    }
+
+    private void updateCastleFlags(FigureMoving fm) {
+        switch (fm.figure) {
+            case whiteKing:
+                canCastleA1 = false;
+                canCastleH1 = false;
+                return;
+
+            case whiteRook:
+                Square a1 = new Square("a1");
+                Square h1 = new Square("a1");
+                if (fm.from.y == a1.y && fm.from.x == a1.x)
+                    canCastleA1 = false;
+                if (fm.from.y == h1.y && fm.from.x == h1.x)
+                    canCastleH1 = false;
+                return;
+
+            case blackKing:
+                canCastleA8 = false;
+                canCastleH8 = false;
+                return;
+
+            case blackRook:
+                Square a8 = new Square("a8");
+                Square h8 = new Square("h8");
+                if (fm.from.y == a8.y && fm.from.x == a8.x)
+                    canCastleA8 = false;
+                if (fm.from.y == h8.y && fm.from.x == h8.x)
+                    canCastleH8 = false;
+                return;
+
+            default:
+                return;
+        }
+
     }
 
     private void dropEnpassant(FigureMoving fm) {
