@@ -39,7 +39,8 @@ public class Game extends AbstractEntity {
         Board nextBoard = board.move(fm);
         Game nextChess = new Game(nextBoard);
 
-        System.out.println(getAllMoves());
+//        System.out.println(getAllMoves());
+        System.out.println(this.fen);
 
         return nextChess;
     }

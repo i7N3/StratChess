@@ -105,10 +105,6 @@ public class Board extends AbstractEntity {
     }
 
     private void generateFen() {
-//        this.fen = fenFigures() + " " +
-//                (moveColor.name() == Color.white.name() ? "w" : "b") +
-//                " - - 0 " + moveNumber;
-
         this.fen = fenFigures() + " " +
                 fenMoveColor() + " " +
                 fenCastleFlags() + " " +
@@ -123,7 +119,7 @@ public class Board extends AbstractEntity {
 
     private String fenCastleFlags() {
         String flags = (canCastleA1 ? "Q" : "") +
-                (canCastleH1 ? "k" : "") +
+                (canCastleH1 ? "K" : "") +
                 (canCastleA8 ? "q" : "") +
                 (canCastleH8 ? "k" : "");
 
@@ -131,15 +127,15 @@ public class Board extends AbstractEntity {
     }
 
     private String fenEnpassant() {
-        return enpassant.getName();
+        return this.enpassant.getName();
     }
 
     private String fenDrawNumber() {
-        return Integer.toString(drawNumber);
+        return Integer.toString(this.drawNumber);
     }
 
     private String fenMoveNumber() {
-        return Integer.toString(moveNumber);
+        return Integer.toString(this.moveNumber);
     }
 
     private String fenFigures() {
@@ -168,14 +164,17 @@ public class Board extends AbstractEntity {
 
     private void setFigureAt(Square square, Figure figure) {
         if (square.onBoard())
-            figures[square.x][square.y] = figure;
+            this.figures[square.x][square.y] = figure;
     }
 
     public Board move(FigureMoving fm) {
         Board next = new Board(fen);
-        
+
         next.setFigureAt(fm.from, Figure.none);
-        next.setFigureAt(fm.to, fm.promotion.figure == Figure.none.figure ? fm.figure : fm.promotion);
+        next.setFigureAt(fm.to, fm.placedFigure());
+
+        next.dropEnpassant(fm);
+        next.updateEnpassant(fm);
 
         if (moveColor == Color.black)
             next.moveNumber++;
@@ -183,5 +182,23 @@ public class Board extends AbstractEntity {
         next.moveColor = moveColor.flipColor(moveColor);
         next.generateFen();
         return next;
+    }
+
+    private void dropEnpassant(FigureMoving fm) {
+        if (fm.to.y == enpassant.y && fm.to.x == enpassant.x)
+            if (fm.figure == Figure.whitePawn || fm.figure == Figure.blackPawn)
+                setFigureAt(new Square(fm.to.x, fm.from.y), Figure.none);
+    }
+
+    private void updateEnpassant(FigureMoving fm) {
+        if (fm.figure == Figure.whitePawn) {
+            if (fm.from.y == 1 && fm.to.y == 3)
+                enpassant = new Square(fm.from.x, 2);
+        } else if (fm.figure == Figure.blackPawn) {
+            if (fm.from.y == 6 && fm.to.y == 4)
+                enpassant = new Square(fm.from.x, 5);
+        } else {
+            enpassant = new Square(-1, -1); // Square.none
+        }
     }
 }

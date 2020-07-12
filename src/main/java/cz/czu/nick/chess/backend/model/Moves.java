@@ -84,7 +84,7 @@ public class Moves {
             if (at.x == fm.to.x && at.y == fm.to.y)
                 return true;
         } while (at.onBoard() && board.getFigureAt(at).figure == Figure.none.figure);
-        
+
         return false;
     }
 
@@ -114,13 +114,24 @@ public class Moves {
         return false;
     }
 
+    private boolean canPawnEnpassant(int stepY) {
+        if (fm.to.x == board.enpassant.x && fm.to.y == board.enpassant.y)
+            if (board.getFigureAt(fm.to) == Figure.none)
+                if (fm.deltaY() == stepY)
+                    if (fm.absDeltaX() == 1)
+                        if (stepY == +1 && fm.from.y == 4 ||
+                                stepY == -1 && fm.from.y == 3)
+                            return true;
+
+        return false;
+    }
+
     private boolean canPawnMove() {
         if (fm.from.y < 1 || fm.from.y > 6) return false;
         int stepY = Figure.getColor(fm.figure).name() == Color.white.name() ? 1 : -1;
-        return
-                canPawnGo(stepY) ||
-                        canPawnJump(stepY) ||
-                        canPawnEat(stepY);
-        // TODO: En passant
+        return canPawnGo(stepY) ||
+                canPawnJump(stepY) ||
+                canPawnEat(stepY) ||
+                canPawnEnpassant(stepY);
     }
 }
