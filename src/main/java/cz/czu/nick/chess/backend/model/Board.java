@@ -7,11 +7,17 @@ import java.util.ArrayList;
 
 public class Board extends AbstractEntity {
 
+    @Getter
+    @Setter
     public String fen;
+    @Getter
+    @Setter
     public Color moveColor;
-    int moveNumber;
+    @Getter
+    @Setter
+    public int moveNumber;
 
-    static Figure[][] figures;
+    private Figure[][] figures;
 
     @Getter
     @Setter
@@ -49,7 +55,7 @@ public class Board extends AbstractEntity {
         return yieldFigures;
     }
 
-    void init() {
+    private void init() {
         // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         //  0                                           1 2    3 4 5
 
@@ -64,7 +70,7 @@ public class Board extends AbstractEntity {
         initMoveNumber(parts[5]);
     }
 
-    void initFigures(String data) {
+    private void initFigures(String data) {
         for (int j = 8; j >= 2; j--)
             data = data.replaceAll(Integer.toString(j), (j - 1) + "1");
 
@@ -83,7 +89,7 @@ public class Board extends AbstractEntity {
         this.canCastleA1 = v.contains("Q");
         this.canCastleH1 = v.contains("K");
         this.canCastleA8 = v.contains("q");
-        this.canCastleH1 = v.contains("k");
+        this.canCastleH8 = v.contains("k");
     }
 
     private void initEnpassant(String v) {
@@ -98,13 +104,45 @@ public class Board extends AbstractEntity {
         this.moveNumber = Integer.parseInt(v);
     }
 
-    void generateFen() {
+    private void generateFen() {
+//        this.fen = fenFigures() + " " +
+//                (moveColor.name() == Color.white.name() ? "w" : "b") +
+//                " - - 0 " + moveNumber;
+
         this.fen = fenFigures() + " " +
-                (moveColor.name() == Color.white.name() ? "w" : "b") +
-                " - - 0 " + moveNumber;
+                fenMoveColor() + " " +
+                fenCastleFlags() + " " +
+                fenEnpassant() + " " +
+                fenDrawNumber() + " " +
+                fenMoveNumber();
     }
 
-    String fenFigures() {
+    private String fenMoveColor() {
+        return moveColor == Color.white ? "w" : "b";
+    }
+
+    private String fenCastleFlags() {
+        String flags = (canCastleA1 ? "Q" : "") +
+                (canCastleH1 ? "k" : "") +
+                (canCastleA8 ? "q" : "") +
+                (canCastleH8 ? "k" : "");
+
+        return flags.length() == 0 ? "-" : flags;
+    }
+
+    private String fenEnpassant() {
+        return enpassant.getName();
+    }
+
+    private String fenDrawNumber() {
+        return Integer.toString(drawNumber);
+    }
+
+    private String fenMoveNumber() {
+        return Integer.toString(moveNumber);
+    }
+
+    private String fenFigures() {
         StringBuilder sb = new StringBuilder();
         for (int y = 7; y >= 0; y--) {
             for (int x = 0; x < 8; x++)
@@ -122,32 +160,28 @@ public class Board extends AbstractEntity {
         return resultFen;
     }
 
-    static public Figure getFigureAt(Square square) {
+    public Figure getFigureAt(Square square) {
         if (square.onBoard() && figures[square.x][square.y] instanceof Figure)
             return figures[square.x][square.y];
         return Figure.none;
     }
 
-    void setFigureAt(Square square, Figure figure) {
+    private void setFigureAt(Square square, Figure figure) {
         if (square.onBoard())
             figures[square.x][square.y] = figure;
     }
 
     public Board move(FigureMoving fm) {
         Board next = new Board(fen);
+        
         next.setFigureAt(fm.from, Figure.none);
         next.setFigureAt(fm.to, fm.promotion.figure == Figure.none.figure ? fm.figure : fm.promotion);
 
-        if (moveColor.name() == Color.black.name())
+        if (moveColor == Color.black)
             next.moveNumber++;
 
         next.moveColor = moveColor.flipColor(moveColor);
         next.generateFen();
         return next;
-    }
-
-    // TODO: IsCheck()
-    public Boolean isChecked() {
-        return false;
     }
 }
