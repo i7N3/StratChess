@@ -56,13 +56,6 @@ public class Game extends AbstractEntity {
         this.fen = board.fen;
         this.moves = new Moves(board);
         setCheckFlags();
-
-//        System.out.println("=====================>");
-//        System.out.println(
-//                "IS CHECK: " + this.isCheck +
-//                        " IS CHECKMATE: " + this.isCheckmate +
-//                        " IS STALEMATE: " + this.isStalemate);
-//        System.out.println("=====================>");
     }
 
     private void setCheckFlags() {
@@ -79,17 +72,25 @@ public class Game extends AbstractEntity {
             this.isStalemate = true;
     }
 
+    public boolean isValidMove(String move) {
+        FigureMoving fm = new FigureMoving(move);
+
+        if (!moves.canMove(fm))
+            return false;
+        if (this.board.isCheckAfter(fm))
+            return false;
+
+        return true;
+    }
+
     public Game move(String move) {
 //        ArrayList<String> allMoves = getAllMoves();
 //        allMoves.forEach(m -> System.out.println(m));
 
+        if (!isValidMove(move))
+            return this;
+
         FigureMoving fm = new FigureMoving(move);
-
-        if (!moves.canMove(fm))
-            return this;
-
-        if (this.board.isCheckAfter(fm))
-            return this;
 
         Board nextBoard = board.move(fm);
         Game nextChess = new Game(nextBoard);
@@ -128,7 +129,7 @@ public class Game extends AbstractEntity {
     void findAllMoves() {
         this.allMoves = new ArrayList<>();
 
-        for (FigureOnSquare fs : board.yieldFigures())
+        for (FigureOnSquare fs : this.board.yieldFigures())
             for (Square to : Square.yieldSquares()) {
                 for (Figure promotion : fs.figure.yieldPromotions(to)) {
                     FigureMoving fm = new FigureMoving(fs, to, promotion);
@@ -147,5 +148,18 @@ public class Game extends AbstractEntity {
         for (FigureMoving fm : this.allMoves)
             list.add(fm.toString());
         return list;
+    }
+
+    // testing helper
+    // https://www.chessprogramming.org/Perft_Results
+    static int nextMoves(int step, Game game) {
+        if (step == 0) return 1;
+        int count = 0;
+
+        ArrayList<String> list = game.getAllMoves();
+        for (String moves : list)
+            count += Game.nextMoves(step - 1, game.move(moves));
+
+        return count;
     }
 }

@@ -16,7 +16,8 @@ public class Moves {
 
     boolean canMoveFrom() {
         return fm.from.onBoard() &&
-                Figure.getColor(fm.figure).name() == board.moveColor.name();
+                Figure.getColor(fm.figure).name() == board.moveColor.name() &&
+                board.getFigureAt(fm.from).name() == fm.figure.name();
     }
 
     boolean canMoveTo() {
