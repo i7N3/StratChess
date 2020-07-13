@@ -281,4 +281,37 @@ public class Board extends AbstractEntity {
             enpassant = new Square(-1, -1); // Square.none
         }
     }
+
+    public boolean isCheck() {
+        return isCheckAfter(new FigureMoving());
+    }
+
+    public boolean isCheckAfter(FigureMoving fm) {
+        Board after = move(fm);
+        return after.canEatKing();
+    }
+
+    private boolean canEatKing() {
+        Square enemyKing = findEnemyKing();
+        Moves moves = new Moves(this);
+
+        for (FigureOnSquare fs : yieldFigures())
+            if (moves.canMove(new FigureMoving(fs, enemyKing)))
+                return true;
+
+        return false;
+    }
+
+    private Square findEnemyKing() {
+        Figure enemyKing =
+                moveColor == Color.white ?
+                        Figure.blackKing :
+                        Figure.whiteKing;
+
+        for (Square s : Square.yieldSquares())
+            if (getFigureAt(s) == enemyKing)
+                return s;
+
+        return new Square(-1, -1);
+    }
 }

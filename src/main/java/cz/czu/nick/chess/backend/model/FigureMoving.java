@@ -20,6 +20,15 @@ public class FigureMoving {
     @Setter
     Figure promotion = Figure.none;
 
+    public static FigureMoving none = new FigureMoving();
+
+    public FigureMoving() {
+        this.figure = Figure.none;
+        this.from = new Square(-1, -1);
+        this.to = new Square(-1, -1);
+        this.promotion = Figure.none;
+    }
+
     public FigureMoving(FigureOnSquare fs, Square to) {
         this.figure = fs.figure;
         this.from = fs.square;

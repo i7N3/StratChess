@@ -22,12 +22,9 @@ public class Moves {
     boolean canMoveTo() {
         Figure figure = board.getFigureAt(fm.to);
 
-        return
-                (
-                        fm.to.onBoard() &&
-                                ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
-                                (Figure.getColor(figure).name() != board.moveColor.name())
-                );
+        return fm.to.onBoard() &&
+                ((fm.from.x != fm.to.x) || (fm.from.y != fm.to.y)) &&
+                (Figure.getColor(figure).name() != board.moveColor.name());
     }
 
     boolean canFigureMove() {
@@ -81,9 +78,9 @@ public class Moves {
                         if (board.getFigureAt(new Square("h1")) == Figure.whiteRook)
                             if (board.getFigureAt(new Square("f1")) == Figure.none)
                                 if (board.getFigureAt(new Square("g1")) == Figure.none)
-                                    // if (!board.isCheck()) {}
-                                    // if (!board.isCheckAfterMove(new FigureMoving("Ke1f1"))) {}
-                                    return true;
+                                    if (!board.isCheck())
+                                        if (!board.isCheckAfter(new FigureMoving("Ke1f1")))
+                                            return true;
 
             if (fm.from.y == e1.y && fm.from.x == e1.x)
                 if (fm.to.y == c1.y && fm.to.x == c1.x)
@@ -92,9 +89,9 @@ public class Moves {
                             if (board.getFigureAt(new Square("b1")) == Figure.none)
                                 if (board.getFigureAt(new Square("c1")) == Figure.none)
                                     if (board.getFigureAt(new Square("d1")) == Figure.none)
-                                        // if (!board.isCheck()) {}
-                                        // if (!board.isCheckAfterMove(new FigureMoving("ke1d1"))) {}
-                                        return true;
+                                        if (!board.isCheck())
+                                            if (!board.isCheckAfter(new FigureMoving("ke1d1")))
+                                                return true;
         }
 
         if (fm.figure == Figure.blackKing) {
@@ -108,9 +105,9 @@ public class Moves {
                         if (board.getFigureAt(new Square("h8")) == Figure.blackRook)
                             if (board.getFigureAt(new Square("f8")) == Figure.none)
                                 if (board.getFigureAt(new Square("g8")) == Figure.none)
-                                    // if (!board.isCheck()) {}
-                                    // if (!board.isCheckAfterMove(new FigureMoving("ke8f8"))) {}
-                                    return true;
+                                    if (!board.isCheck())
+                                        if (!board.isCheckAfter(new FigureMoving("ke8f8")))
+                                            return true;
 
             if (fm.from.y == e8.y && fm.from.x == e8.x)
                 if (fm.to.y == c8.y && fm.to.x == c8.x)
@@ -119,9 +116,9 @@ public class Moves {
                             if (board.getFigureAt(new Square("b8")) == Figure.none)
                                 if (board.getFigureAt(new Square("c8")) == Figure.none)
                                     if (board.getFigureAt(new Square("d8")) == Figure.none)
-                                        // if (!board.isCheck()) {}
-                                        // if (!board.isCheckAfterMove(new FigureMoving("Ke8d8"))) {}
-                                        return true;
+                                        if (!board.isCheck())
+                                            if (!board.isCheckAfter(new FigureMoving("Ke8d8")))
+                                                return true;
         }
 
         return false;
