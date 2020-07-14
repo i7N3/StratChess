@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
-public class Board extends AbstractEntity {
+public class Board {
 
     @Getter
     @Setter
@@ -168,7 +168,7 @@ public class Board extends AbstractEntity {
     }
 
     public Board move(FigureMoving fm) {
-        Board next = new Board(fen);
+        Board next = new Board(this.fen);
 
         next.setFigureAt(fm.from, Figure.none);
         next.setFigureAt(fm.to, fm.placedFigure());
@@ -178,7 +178,7 @@ public class Board extends AbstractEntity {
         next.moveCastleRook(fm);
         next.updateCastleFlags(fm);
 
-        if (moveColor == Color.black)
+        if (this.moveColor == Color.black)
             next.moveNumber++;
 
         next.moveColor = moveColor.flipColor(moveColor);

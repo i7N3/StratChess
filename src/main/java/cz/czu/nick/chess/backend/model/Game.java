@@ -3,17 +3,19 @@ package cz.czu.nick.chess.backend.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
 import java.util.ArrayList;
 
-@Entity
-public class Game extends AbstractEntity {
+public class Game {
 
+    @Getter
+    @Setter
+    public Board board;
+    @Getter
+    @Setter
+    public Moves moves;
+    @Getter
+    @Setter
     public String fen;
-    public static Board board;
-    public static Moves moves;
-    public static ArrayList<FigureMoving> allMoves;
-
     @Getter
     @Setter
     public boolean isCheck;
@@ -37,7 +39,7 @@ public class Game extends AbstractEntity {
 
     public Game() {
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-//        this.fen = "7k/8/5K2/8/8/8/6Q1/8 w - - 0 0";
+//        this.fen = "r6r/1b2k1bq/8/8/7B/8/8/R3K2R b QK - 3 2";
         this.board = new Board(fen);
         this.moves = new Moves(board);
 
@@ -92,7 +94,7 @@ public class Game extends AbstractEntity {
 
         FigureMoving fm = new FigureMoving(move);
 
-        Board nextBoard = board.move(fm);
+        Board nextBoard = this.board.move(fm);
         Game nextChess = new Game(nextBoard);
 
         return nextChess;
@@ -126,8 +128,8 @@ public class Game extends AbstractEntity {
         return result;
     }
 
-    void findAllMoves() {
-        this.allMoves = new ArrayList<>();
+    private ArrayList<FigureMoving> findAllMoves() {
+        ArrayList<FigureMoving> allMoves = new ArrayList<>();
 
         for (FigureOnSquare fs : this.board.yieldFigures())
             for (Square to : Square.yieldSquares()) {
@@ -136,17 +138,19 @@ public class Game extends AbstractEntity {
 
                     if (this.moves.canMove(fm))
                         if (!this.board.isCheckAfter(fm))
-                            this.allMoves.add(fm);
+                            allMoves.add(fm);
                 }
             }
+
+        return allMoves;
     }
 
     public ArrayList<String> getAllMoves() {
-        findAllMoves();
         ArrayList<String> list = new ArrayList<>();
 
-        for (FigureMoving fm : this.allMoves)
+        for (FigureMoving fm : findAllMoves())
             list.add(fm.toString());
+
         return list;
     }
 
