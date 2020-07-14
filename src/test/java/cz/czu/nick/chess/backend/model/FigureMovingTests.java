@@ -1,18 +1,13 @@
-package cz.czu.nick.chess.old;
+package cz.czu.nick.chess.backend.model;
 
-import cz.czu.nick.chess.old.Figure;
-import cz.czu.nick.chess.old.FigureMoving;
-import cz.czu.nick.chess.old.FigureOnSquare;
-import cz.czu.nick.chess.old.Square;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class FigureMovingTests {
-
     private Figure whiteRook = Figure.getFigureType('R');
 
     private Square from = new Square(0, 0);
-    private Square to  = new Square(0, 7);
+    private Square to = new Square(0, 7);
 
     private FigureOnSquare fs1 = new FigureOnSquare(whiteRook, from);
     private FigureMoving fm1 = new FigureMoving(fs1, to);

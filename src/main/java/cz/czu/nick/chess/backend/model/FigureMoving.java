@@ -8,21 +8,34 @@ public class FigureMoving {
     @Getter
     @Setter
     Figure figure;
-    @Getter @Setter Square from;
-    @Getter @Setter Square to;
+    @Getter
+    @Setter
+    Square from;
+    @Getter
+    @Setter
+    Square to;
 
     // When Pawn reaches its eighth rank
-    @Getter @Setter Figure promotion = Figure.none;
+    @Getter
+    @Setter
+    Figure promotion = Figure.none;
 
-    public FigureMoving(FigureOnSquare fs, Square to)
-    {
+    public static FigureMoving none = new FigureMoving();
+
+    public FigureMoving() {
+        this.figure = Figure.none;
+        this.from = new Square(-1, -1);
+        this.to = new Square(-1, -1);
+        this.promotion = Figure.none;
+    }
+
+    public FigureMoving(FigureOnSquare fs, Square to) {
         this.figure = fs.figure;
         this.from = fs.square;
         this.to = to;
     }
 
-    public FigureMoving(FigureOnSquare fs, Square to, Figure promotion)
-    {
+    public FigureMoving(FigureOnSquare fs, Square to, Figure promotion) {
         this.figure = fs.figure;
         this.from = fs.square;
         this.to = to;
@@ -31,8 +44,7 @@ public class FigureMoving {
 
     public FigureMoving(String move) // Pe2e4   Pe7e8Q
     {
-        for (Figure f : Figure.values())
-        {
+        for (Figure f : Figure.values()) {
             if (move.charAt(0) == f.figure)
                 this.figure = f;
         }
@@ -41,8 +53,7 @@ public class FigureMoving {
         this.to = new Square(move.substring(3, 5));
 
         if (move.length() == 6) {
-            for (Figure f : Figure.values())
-            {
+            for (Figure f : Figure.values()) {
                 if (move.charAt(5) == f.figure)
                     this.promotion = f;
                 else
@@ -51,26 +62,23 @@ public class FigureMoving {
         }
     }
 
-    public int deltaX()
-    {
+    public int deltaX() {
         return to.x - from.x;
     }
-    public int deltaY()
-    {
+
+    public int deltaY() {
         return to.y - from.y;
     }
 
-    public int absDeltaX()
-    {
+    public int absDeltaX() {
         return Math.abs(deltaX());
     }
-    public int absDeltaY()
-    {
+
+    public int absDeltaY() {
         return Math.abs(deltaY());
     }
 
-    public int signX()
-    {
+    public int signX() {
         if (this.deltaX() == 0) return 0;
 
         if (this.deltaX() > 0)
@@ -79,14 +87,17 @@ public class FigureMoving {
             return -1;
     }
 
-    public int signY()
-    {
+    public int signY() {
         if (this.deltaY() == 0) return 0;
 
         if (this.deltaY() > 0)
             return 1;
         else
             return -1;
+    }
+
+    public Figure placedFigure() {
+        return promotion == Figure.none ? figure : promotion;
     }
 
     public String toString() {

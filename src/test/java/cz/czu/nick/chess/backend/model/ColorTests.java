@@ -1,10 +1,9 @@
-package cz.czu.nick.chess.old;
+package cz.czu.nick.chess.backend.model;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ColorTests {
-
     @Test
     public void flipColor_WHITE_TO_BLACK() {
         Color color = Color.white;

@@ -1,13 +1,12 @@
-package cz.czu.nick.chess.old;
+package cz.czu.nick.chess.backend.model;
 
-import cz.czu.nick.chess.old.Square;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 
 public class SquareTests {
 

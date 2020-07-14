@@ -1,11 +1,9 @@
-package cz.czu.nick.chess.old;
+package cz.czu.nick.chess.backend.model;
 
-import cz.czu.nick.chess.old.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class MovesTests {
-
     private Figure whitePawn = Figure.getFigureType('P');
 
     private Square from = new Square(0, 1);
@@ -75,6 +73,4 @@ public class MovesTests {
         boolean canQueenStraightMove = moves.canMove(fm);
         Assert.assertTrue(canQueenStraightMove);
     }
-
-    // TODO: all moves methods
 }
