@@ -33,11 +33,8 @@ body {
 }
 
 .box img {
+    position: relative;
     width: 80%;
-}
-
-.active {
-    background: palegreen !important;
 }
 
 .box-inner {
@@ -96,4 +93,30 @@ body {
 
 .box:nth-child(n + 57):nth-child(-n + 64):nth-child(odd) {
     background-color: #441a03;
+}
+
+.validMove,
+.active {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.validMove:before,
+.active:before {
+    position: absolute;
+    content: '';
+    opacity: 0.4;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.active:before {
+    background: #46ff46;
+}
+
+.validMove:before {
+    background: #89e089;
 }

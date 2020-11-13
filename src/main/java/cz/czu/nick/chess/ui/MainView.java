@@ -17,6 +17,6 @@ public class MainView extends Div {
 
     public MainView(@Autowired GameService gameService) {
         this.boardComponent = new BoardComponent(gameService);
-        add(boardComponent);
+        add(this.boardComponent);
     }
 }

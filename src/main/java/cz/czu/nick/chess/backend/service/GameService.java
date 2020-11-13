@@ -5,6 +5,8 @@ import cz.czu.nick.chess.backend.model.Game;
 import cz.czu.nick.chess.backend.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class GameService {
 
@@ -30,6 +32,16 @@ public class GameService {
     public Color getMoveColor() {
         return this.game.board.moveColor;
     }
+
+    public ArrayList<String> getAllMoves() {
+        return this.game.getAllMoves();
+
+    }
+
+//    public ArrayList<String> getValidMoves() {
+//        return this.game.
+//    }
+
 
 //    @PostConstruct
 //    public void populateTestData() {
