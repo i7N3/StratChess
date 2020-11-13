@@ -1,5 +1,6 @@
 package cz.czu.nick.chess.backend.model;
 
+// TODO: rename
 public class Moves {
 
     FigureMoving fm;
@@ -29,6 +30,7 @@ public class Moves {
     }
 
     boolean canFigureMove() {
+
         switch (fm.figure) {
             case whiteKing:
             case blackKing:

@@ -1,5 +1,7 @@
 package cz.czu.nick.chess.backend.model;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
 public enum Figure {
@@ -20,6 +22,7 @@ public enum Figure {
     blackKnight('n'),
     blackPawn('p');
 
+    @Getter
     char figure;
 
     Figure() {
