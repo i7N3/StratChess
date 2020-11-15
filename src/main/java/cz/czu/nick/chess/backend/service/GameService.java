@@ -1,53 +1,43 @@
 package cz.czu.nick.chess.backend.service;
 
-import cz.czu.nick.chess.backend.model.Color;
 import cz.czu.nick.chess.backend.model.Game;
-import cz.czu.nick.chess.backend.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class GameService {
 
-    private Game game = new Game();
-    private GameRepository gameRepository;
+    private Map<String, Game> games = new HashMap<>();
 
-    public GameService() {
+    public Game createGame() {
+        Game game = new Game();
+        games.put(UUID.randomUUID().toString(), game);
+        return game;
     }
 
-    public GameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
+    public Game joinGame(String id) {
+        // TODO: handle exp
+        return games.get(id);
     }
 
-    public char getFigureAt(int x, int y) {
-        return game.getFigureAt(x, y);
-    }
-
-    public Game move(String move) {
-        this.game = game.move(move);
-        return this.game;
-    }
-
-    public Color getMoveColor() {
-        return this.game.board.moveColor;
-    }
-
-    public ArrayList<String> getAllMoves() {
-        return this.game.getAllMoves();
-
-    }
-
-//    public ArrayList<String> getValidMoves() {
-//        return this.game.
+//    public char getFigureAt(int x, int y) {
+//        return game.getFigureAt(x, y);
 //    }
-
-
-//    @PostConstruct
-//    public void populateTestData() {
-//        if (gameRepository.count() == 0) {
-//            Game game = new Game();
-//            gameRepository.save(game);
-//        }
+//
+//    public Game move(String move) {
+//        this.game = game.move(move);
+//        return this.game;
+//    }
+//
+//    public Color getMoveColor() {
+//        return this.game.board.moveColor;
+//    }
+//
+//    public ArrayList<String> getAllMoves() {
+//        return this.game.getAllMoves();
+//
 //    }
 }

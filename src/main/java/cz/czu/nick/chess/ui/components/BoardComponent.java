@@ -2,10 +2,7 @@ package cz.czu.nick.chess.ui.components;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.html.Div;
-import cz.czu.nick.chess.backend.model.Figure;
-import cz.czu.nick.chess.backend.model.FigureMoving;
-import cz.czu.nick.chess.backend.model.FigureOnSquare;
-import cz.czu.nick.chess.backend.model.Square;
+import cz.czu.nick.chess.backend.model.*;
 import cz.czu.nick.chess.backend.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +11,7 @@ import java.util.stream.IntStream;
 
 public class BoardComponent extends Div {
 
-    private GameService gameService;
+    private Game game;
 
     private Figure selectedFigure = Figure.none;
     private ChessPieceComponent selectedChessPiece = new ChessPieceComponent(Figure.none);
@@ -25,12 +22,10 @@ public class BoardComponent extends Div {
     private Div board = new Div();
     private ChessPieceComponent[][] chessPieces = new ChessPieceComponent[8][8];
 
-    public BoardComponent() {
-    }
+    public BoardComponent(Game game) {
 
-    public BoardComponent(@Autowired GameService gameService) {
+        this.game = game;
 
-        this.gameService = gameService;
         this.board.addClassName("board");
 
         Div wrapper = new Div();
@@ -77,7 +72,7 @@ public class BoardComponent extends Div {
     }
 
     private void setSelectedFigure(ClickEvent event, ChessPieceComponent piece, Figure figure, Square square) {
-        if (figure != Figure.none && this.gameService.getMoveColor() == Figure.getColor(figure)) {
+        if (figure != Figure.none && this.game.getMoveColor() == Figure.getColor(figure)) {
             clear();
             markActiveSquare(piece, figure, square);
             markAvailableSquares();
@@ -95,7 +90,7 @@ public class BoardComponent extends Div {
         FigureOnSquare figureOnSquare = new FigureOnSquare(this.selectedFigure, this.from);
         FigureMoving fm = new FigureMoving(figureOnSquare, this.to);
 
-        this.gameService.move(fm.toString());
+        this.game.move(fm.toString());
 
         updateBoard();
 
@@ -113,7 +108,7 @@ public class BoardComponent extends Div {
     }
 
     private void markAvailableSquares() {
-        ArrayList<String> allMoves = this.gameService.getAllMoves();
+        ArrayList<String> allMoves = this.game.getAllMoves();
 
         allMoves.forEach(move -> {
             Square s1 = new Square(move.substring(1, 3));
@@ -139,7 +134,7 @@ public class BoardComponent extends Div {
 
         for (int y = 7; y >= 0; y--) {
             for (int x = 0; x < 8; x++) {
-                char f = this.gameService.getFigureAt(x, y);
+                char f = this.game.getFigureAt(x, y);
 
                 Square square = new Square(x, y);
                 Figure figure = Figure.getFigureType(f);
