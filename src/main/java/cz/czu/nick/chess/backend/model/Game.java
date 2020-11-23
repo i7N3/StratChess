@@ -89,7 +89,7 @@ public class Game {
     public Game move(String move) {
 //        ArrayList<String> allMoves = getAllMoves();
 //        allMoves.forEach(m -> System.out.println(m));
-
+        
         if (!isValidMove(move))
             return this;
 
@@ -99,6 +99,10 @@ public class Game {
         Game nextChess = new Game(nextBoard);
 
         return nextChess;
+    }
+
+    public Color getMoveColor() {
+        return this.board.getMoveColor();
     }
 
     public char getFigureAt(int x, int y) {

@@ -2,6 +2,7 @@ package cz.czu.nick.chess.backend.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,4 +17,10 @@ public class User {
     @Id
     private String username;
     private String passwordHash;
+
+    public void setPasswordHash(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPass = bCryptPasswordEncoder.encode(password);
+        passwordHash = hashedPass;
+    }
 }

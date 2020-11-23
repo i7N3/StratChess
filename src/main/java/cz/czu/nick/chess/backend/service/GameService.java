@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+// Singleton
 public class GameService {
 
+    // TODO: replace with ConcurrentHashMap
     private Map<String, Game> games = new HashMap<>();
 
     public Game createGame() {
