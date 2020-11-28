@@ -21,14 +21,15 @@ public class RegistrationView extends FormLayout implements BeforeEnterObserver 
 
     public static final String ROUTE = "registration";
 
-    @Autowired
     private UserService userService;
     private final Binder<User> binder = new Binder<>();
 
     private TextField username = new TextField("login");
     private TextField password = new TextField("password");
 
-    public RegistrationView() {
+    @Autowired
+    public RegistrationView(UserService userService) {
+        this.userService = userService;
 
         add(new H1("Registration"));
         add(username);

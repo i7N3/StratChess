@@ -1,12 +1,13 @@
 package cz.czu.nick.chess.backend.model;
 
+import cz.czu.nick.chess.app.security.SecurityUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -16,11 +17,10 @@ public class User {
 
     @Id
     private String username;
+    @NotEmpty
     private String passwordHash;
 
     public void setPasswordHash(String password) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String hashedPass = bCryptPasswordEncoder.encode(password);
-        passwordHash = hashedPass;
+        passwordHash = SecurityUtils.encoder().encode(password);
     }
 }

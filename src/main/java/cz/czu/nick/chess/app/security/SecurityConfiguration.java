@@ -2,17 +2,15 @@ package cz.czu.nick.chess.app.security;
 
 import cz.czu.nick.chess.ui.LoginView;
 import cz.czu.nick.chess.ui.RegistrationView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * Configures spring security, doing the following:
@@ -25,8 +23,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 // https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin/adding-a-login-screen-to-a-vaadin-app-with-spring-security
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String LOGOUT_SUCCESS_URL = "/";
-    private static final String REGISTRATION_URL = "/registration";
+    @Autowired
+    CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     @Override
@@ -41,11 +39,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new CustomRequestCache();
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // Custom authentication provider - Order 1
+        auth.authenticationProvider(customAuthenticationProvider);
+        // Built-in authentication provider - Order 2
+        auth.inMemoryAuthentication()
+                .withUser("user")
+                .password("{noop}password")
+                .roles("USER");
+    }
+
     /**
      * Require login to access internal pages and configure login form.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         // Not using Spring CSRF here to be able to use plain HTML for the login page
         http.csrf().disable()
 
@@ -69,7 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/" + LoginView.ROUTE).permitAll()
 
                 // Configure logout
-                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+                .and().logout().logoutSuccessUrl("/" + LoginView.ROUTE);
     }
 
     /**
@@ -109,16 +119,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/frontend-es5/**", "/frontend-es6/**");
     }
 
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        // typical logged in user with some privileges
-        UserDetails user =
-                User.withUsername("user")
-                        .password("{noop}password")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
 }

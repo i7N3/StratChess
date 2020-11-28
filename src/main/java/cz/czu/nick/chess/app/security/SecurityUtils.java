@@ -2,9 +2,12 @@ package cz.czu.nick.chess.app.security;
 
 import com.vaadin.flow.server.ServletHelper.RequestType;
 import com.vaadin.flow.shared.ApplicationConstants;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Stream;
@@ -41,5 +44,10 @@ public final class SecurityUtils {
     private static boolean isUserLoggedIn(Authentication authentication) {
         return authentication != null
                 && !(authentication instanceof AnonymousAuthenticationToken);
+    }
+
+    @Bean
+    public static PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
 }

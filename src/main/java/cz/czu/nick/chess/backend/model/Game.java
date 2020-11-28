@@ -5,23 +5,20 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Game {
 
-    @Getter
-    @Setter
-    public Board board;
-    @Getter
-    @Setter
-    public Moves moves;
-    @Getter
-    @Setter
     public String fen;
-    @Getter
-    @Setter
+    public Board board;
+    public Moves moves;
+
+    public String player1;
+    public String player2;
+
     public boolean isCheck;
-    @Getter
-    @Setter
     public boolean isCheckmate;
+    public boolean isStarted = false;
     /*
      * TODO:
      * Ничья может быть в случае если:
@@ -33,8 +30,6 @@ public class Game {
      * - 3x кратное повторение ситуации/ходов -> fen1 === fen2
      *
      * */
-    @Getter
-    @Setter
     public boolean isStalemate;
 
     public Game() {
@@ -89,7 +84,7 @@ public class Game {
     public Game move(String move) {
 //        ArrayList<String> allMoves = getAllMoves();
 //        allMoves.forEach(m -> System.out.println(m));
-        
+
         if (!isValidMove(move))
             return this;
 

@@ -18,20 +18,4 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.save(user);
     }
-
-//    public User find() {}
-
-    public String validateUser(User user) {
-//        userRepository.save(user);
-        User foundUser = userRepository.findUserByUsername(user.getUsername());
-        if (foundUser == null) {
-            return null;
-        } else {
-            if (user.getPasswordHash().equals(foundUser.getPasswordHash())) {
-                return foundUser.getUsername();
-            } else {
-                return null;
-            }
-        }
-    }
 }

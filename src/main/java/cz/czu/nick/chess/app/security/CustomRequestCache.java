@@ -32,7 +32,10 @@ public class CustomRequestCache extends HttpSessionRequestCache {
      * casting (we always use {@link DefaultSavedRequest}) and mangling we are able to get the request URI.
      */
     public String resolveRedirectUrl() {
-        SavedRequest savedRequest = getRequest(VaadinServletRequest.getCurrent().getHttpServletRequest(), VaadinServletResponse.getCurrent().getHttpServletResponse());
+        SavedRequest savedRequest = getRequest(
+                VaadinServletRequest.getCurrent().getHttpServletRequest(),
+                VaadinServletResponse.getCurrent().getHttpServletResponse());
+
         if (savedRequest instanceof DefaultSavedRequest) {
             final String requestURI = ((DefaultSavedRequest) savedRequest).getRequestURI();
             // check for valid URI and prevent redirecting to the login view
