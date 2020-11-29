@@ -1,11 +1,12 @@
 package cz.czu.nick.chess.backend.model;
 
-public class Moves {
+// TODO: rename
+public class Move {
 
     FigureMoving fm;
     Board board;
 
-    public Moves(Board board) {
+    public Move(Board board) {
         this.board = board;
     }
 
@@ -29,6 +30,7 @@ public class Moves {
     }
 
     boolean canFigureMove() {
+
         switch (fm.figure) {
             case whiteKing:
             case blackKing:

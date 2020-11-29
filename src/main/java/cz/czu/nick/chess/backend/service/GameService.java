@@ -2,40 +2,56 @@ package cz.czu.nick.chess.backend.service;
 
 import cz.czu.nick.chess.backend.model.Color;
 import cz.czu.nick.chess.backend.model.Game;
-import cz.czu.nick.chess.backend.repository.GameRepository;
+import cz.czu.nick.chess.backend.model.Player;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 @Service
+@Scope("singleton")
 public class GameService {
 
-    private Game game = new Game();
-    private GameRepository gameRepository;
+    private Map<String, Game> games = new ConcurrentHashMap<>();
 
-    public GameService() {
+    public String createGame() {
+        Game game = new Game();
+        String id = UUID.randomUUID().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        game.setPlayer1(new Player(username, Color.white));
+        games.put(id, game);
+
+        // return session id
+        return id;
     }
 
-    public GameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
+    public String joinGame(String id) {
+        // TODO: handle exp
+        Game game = games.get(id);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        game.setPlayer2(new Player(username, Color.black));
+        game.setStarted(true);
+
+        games.put(id, game);
+
+        // return session id
+        return id;
     }
 
-    public char getFigureAt(int x, int y) {
-        return game.getFigureAt(x, y);
+    public Game getGameBySessionId(String id) {
+        return games.get(id);
     }
 
-    public Game move(String move) {
-        this.game = game.move(move);
-        return this.game;
+    public Map<String, Game> getAvailableGames() {
+        return games.entrySet()
+                .stream()
+                .filter(map -> !map.getValue().isStarted())
+                .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
     }
-
-    public Color getMoveColor() {
-        return this.game.board.moveColor;
-    }
-
-//    @PostConstruct
-//    public void populateTestData() {
-//        if (gameRepository.count() == 0) {
-//            Game game = new Game();
-//            gameRepository.save(game);
-//        }
-//    }
 }

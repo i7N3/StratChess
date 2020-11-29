@@ -2,33 +2,29 @@ package cz.czu.nick.chess.ui.components;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.html.Div;
-import cz.czu.nick.chess.backend.model.Figure;
-import cz.czu.nick.chess.backend.model.FigureMoving;
-import cz.czu.nick.chess.backend.model.FigureOnSquare;
-import cz.czu.nick.chess.backend.model.Square;
-import cz.czu.nick.chess.backend.service.GameService;
-import org.springframework.beans.factory.annotation.Autowired;
+import cz.czu.nick.chess.backend.model.*;
 
+import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class BoardComponent extends Div {
 
-    private ChessPieceComponent selectedChessPiece = new ChessPieceComponent(Figure.none);
-    private Figure setSelectedFigure = Figure.none;
+    private Game game;
 
-    private GameService gameService;
+    private Figure selectedFigure = Figure.none;
+    private ChessPieceComponent selectedChessPiece = new ChessPieceComponent(Figure.none);
+
+    private Square to = null;
+    private Square from = null;
 
     private Div board = new Div();
-    private Square from = null;
-    private Square to = null;
+    private ChessPieceComponent[][] chessPieces = new ChessPieceComponent[8][8];
 
-    public BoardComponent() {
-    }
+    public BoardComponent(Game game) {
 
-    public BoardComponent(@Autowired GameService gameService) {
+        this.game = game;
 
-        this.gameService = gameService;
-        this.board.addClassName("board");
+        board.addClassName("board");
 
         Div wrapper = new Div();
         wrapper.addClassName("wrapper");
@@ -61,12 +57,11 @@ public class BoardComponent extends Div {
             wrapperInnerBottom.add(boxInner);
         });
 
-        updateGame();
-
         top.add(wrapperInnerTop);
         wrapper.add(top);
 
-        wrapper.add(this.board);
+        wrapper.add(board);
+        updateBoard();
 
         bottom.add(wrapperInnerBottom);
         wrapper.add(bottom);
@@ -75,52 +70,79 @@ public class BoardComponent extends Div {
     }
 
     private void setSelectedFigure(ClickEvent event, ChessPieceComponent piece, Figure figure, Square square) {
-        if (figure != Figure.none && this.gameService.getMoveColor() == Figure.getColor(figure)) {
-            this.from = new Square(square.x, square.y);
-            this.selectedChessPiece.removeClassName("active");
-
-            this.selectedChessPiece = piece;
-            this.setSelectedFigure = figure;
-
-            this.selectedChessPiece.addClassName("active");
+        if (figure != Figure.none && game.getMoveColor() == Figure.getColor(figure)) {
+            clear();
+            markActiveSquare(piece, figure, square);
+            markAvailableSquares();
         } else {
-            if (this.from != null) {
-                this.to = new Square(square.x, square.y);
-                this.selectedChessPiece.removeClassName("active");
-                move();
+            if (from != null) {
+                move(square);
             }
         }
     }
 
-    private void move() {
-        FigureOnSquare figureOnSquare = new FigureOnSquare(this.setSelectedFigure, this.from);
-        FigureMoving fm = new FigureMoving(figureOnSquare, this.to);
+    private void move(Square square) {
+        to = new Square(square.x, square.y);
+        selectedChessPiece.removeClassName("active");
 
-        this.gameService.move(fm.toString());
-        updateGame();
-        this.setSelectedFigure = Figure.none;
+        FigureOnSquare figureOnSquare = new FigureOnSquare(selectedFigure, from);
+        FigureMoving fm = new FigureMoving(figureOnSquare, to);
+
+        game = game.move(fm.toString());
+        updateBoard();
+
+        selectedFigure = Figure.none;
     }
 
-    // TODO: Update only specific dom nodes
-    private void updateGame() {
-        if (this.board.getElement().getChildCount() > 0) {
-            this.board.getElement().removeAllChildren();
+    private void markActiveSquare(ChessPieceComponent piece, Figure figure, Square square) {
+        from = new Square(square.x, square.y);
+        selectedChessPiece.removeClassName("active");
+
+        selectedFigure = figure;
+        selectedChessPiece = piece;
+
+        selectedChessPiece.addClassName("active");
+    }
+
+    private void markAvailableSquares() {
+        ArrayList<String> allMoves = game.getAllMoves();
+
+        allMoves.forEach(move -> {
+            Square s1 = new Square(move.substring(1, 3));
+            Square s2 = new Square(move.substring(3, 5));
+
+            if (from.x == s1.x && from.y == s1.y) {
+                chessPieces[s2.x][s2.y].addClassName("validMove");
+            }
+        });
+    }
+
+    private void clear() {
+        for (int y = 7; y >= 0; y--) {
+            for (int x = 0; x < 8; x++) {
+                chessPieces[x][y].removeClassName("active");
+                chessPieces[x][y].removeClassName("validMove");
+            }
         }
+    }
+
+    private void updateBoard() {
+        board.getElement().removeAllChildren();
 
         for (int y = 7; y >= 0; y--) {
             for (int x = 0; x < 8; x++) {
-                char f = this.gameService.getFigureAt(x, y);
-
-                Figure figure = Figure.getFigureType(f);
-                ChessPieceComponent chessPiece = new ChessPieceComponent(figure);
+                char f = game.getFigureAt(x, y);
 
                 Square square = new Square(x, y);
+                Figure figure = Figure.getFigureType(f);
+                ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
 
                 chessPiece.addClickListener(e -> {
                     setSelectedFigure(e, chessPiece, figure, square);
                 });
 
-                this.board.add(chessPiece);
+                chessPieces[x][y] = chessPiece;
+                board.add(chessPiece);
             }
         }
     }

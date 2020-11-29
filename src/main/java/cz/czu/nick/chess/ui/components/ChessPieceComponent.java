@@ -3,17 +3,46 @@ package cz.czu.nick.chess.ui.components;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import cz.czu.nick.chess.backend.model.Figure;
+import cz.czu.nick.chess.backend.model.Square;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChessPieceComponent extends Div {
+    @Getter
+    @Setter
+    private Square square = null;
+
+    public ChessPieceComponent() {
+        addClassName("box");
+    }
 
     public ChessPieceComponent(Figure figure) {
         addClassName("box");
+        if (figure != Figure.none) {
+            Image img = getFigureImage(figure);
+            add(img);
+        }
+    }
+
+    public ChessPieceComponent(Figure figure, Square square) {
+        addClassName("box");
+        this.square = new Square(square.x, square.y);
 
         if (figure != Figure.none) {
             Image img = getFigureImage(figure);
             add(img);
         }
     }
+
+//    public ChessPieceComponent(Figure figure, boolean available) {
+//        addClassName("box");
+//        this.square = new Square(square.x, square.y);
+//
+//        if (figure != Figure.none) {
+//            Image img = getFigureImage(figure);
+//            add(img);
+//        }
+//    }
 
     private Image getFigureImage(Figure figure) {
         if (figure == Figure.whitePawn) {

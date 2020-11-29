@@ -5,23 +5,20 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Game {
 
-    @Getter
-    @Setter
-    public Board board;
-    @Getter
-    @Setter
-    public Moves moves;
-    @Getter
-    @Setter
     public String fen;
-    @Getter
-    @Setter
+    public Board board;
+    public Move move;
+
+    public Player player1;
+    public Player player2;
+
     public boolean isCheck;
-    @Getter
-    @Setter
     public boolean isCheckmate;
+    public boolean isStarted = false;
     /*
      * TODO:
      * Ничья может быть в случае если:
@@ -33,15 +30,14 @@ public class Game {
      * - 3x кратное повторение ситуации/ходов -> fen1 === fen2
      *
      * */
-    @Getter
-    @Setter
     public boolean isStalemate;
 
     public Game() {
         this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-//        this.fen = "r6r/1b2k1bq/8/8/7B/8/8/R3K2R b QK - 3 2";
+//        this.fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R" +
+//                " w KQkq - 0 1";
         this.board = new Board(fen);
-        this.moves = new Moves(board);
+        this.move = new Move(board);
 
         setCheckFlags();
     }
@@ -49,14 +45,14 @@ public class Game {
     public Game(String fen) {
         this.fen = fen;
         this.board = new Board(fen);
-        this.moves = new Moves(board);
+        this.move = new Move(board);
         setCheckFlags();
     }
 
     public Game(Board board) {
         this.board = board;
         this.fen = board.fen;
-        this.moves = new Moves(board);
+        this.move = new Move(board);
         setCheckFlags();
     }
 
@@ -77,7 +73,7 @@ public class Game {
     public boolean isValidMove(String move) {
         FigureMoving fm = new FigureMoving(move);
 
-        if (!moves.canMove(fm))
+        if (!this.move.canMove(fm))
             return false;
         if (this.board.isCheckAfter(fm))
             return false;
@@ -86,9 +82,6 @@ public class Game {
     }
 
     public Game move(String move) {
-//        ArrayList<String> allMoves = getAllMoves();
-//        allMoves.forEach(m -> System.out.println(m));
-
         if (!isValidMove(move))
             return this;
 
@@ -98,6 +91,10 @@ public class Game {
         Game nextChess = new Game(nextBoard);
 
         return nextChess;
+    }
+
+    public Color getMoveColor() {
+        return this.board.getMoveColor();
     }
 
     public char getFigureAt(int x, int y) {
@@ -136,7 +133,7 @@ public class Game {
                 for (Figure promotion : fs.figure.yieldPromotions(to)) {
                     FigureMoving fm = new FigureMoving(fs, to, promotion);
 
-                    if (this.moves.canMove(fm))
+                    if (this.move.canMove(fm))
                         if (!this.board.isCheckAfter(fm))
                             allMoves.add(fm);
                 }
