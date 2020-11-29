@@ -45,7 +45,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(customAuthenticationProvider);
         // Built-in authentication provider - Order 2
         auth.inMemoryAuthentication()
-                .withUser("user")
+                .withUser("user1")
+                .password("{noop}password")
+                .roles("USER")
+                .and()
+                .withUser("user2")
                 .password("{noop}password")
                 .roles("USER");
     }

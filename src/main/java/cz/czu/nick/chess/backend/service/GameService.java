@@ -16,15 +16,19 @@ public class GameService {
 
     private Map<String, Game> games = new ConcurrentHashMap<>();
 
-    public Game createGame() {
+    public String createGame() {
         Game game = new Game();
+        String id = UUID.randomUUID().toString();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         game.setPlayer1(username);
-        games.put(UUID.randomUUID().toString(), game);
-        return game;
+        games.put(id, game);
+
+        // return session id
+        return id;
     }
 
-    public Game joinGame(String id) {
+    public String joinGame(String id) {
         // TODO: handle exp
         Game game = games.get(id);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -34,12 +38,15 @@ public class GameService {
 
         games.put(id, game);
 
-        return game;
+        // return session id
+        return id;
+    }
+
+    public Game getGameBySessionId(String id) {
+        return games.get(id);
     }
 
     public Map<String, Game> getAvailableGames() {
-        System.out.println("getAvailableGames");
-
         return games.entrySet()
                 .stream()
                 .filter(map -> !map.getValue().isStarted())

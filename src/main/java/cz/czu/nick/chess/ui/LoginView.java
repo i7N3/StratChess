@@ -1,13 +1,19 @@
 package cz.czu.nick.chess.ui;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.login.LoginForm;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import cz.czu.nick.chess.app.security.CustomRequestCache;
-import cz.czu.nick.chess.backend.service.UserService;
+import cz.czu.nick.chess.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,57 +22,69 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+@Tag("form")
 @Route(value = LoginView.ROUTE)
 @CssImport("./styles/shared-styles.css")
-public class LoginView extends FormLayout implements BeforeEnterObserver {
+public class LoginView extends Div {
 
     public static final String ROUTE = "login";
 
-    private LoginForm login = new LoginForm();
+    private CustomRequestCache requestCache;
+    private AuthenticationManager authenticationManager;
 
+    private final Binder<User> binder = new Binder<>();
 
-    private UserService userService;
+    private H1 title = new H1("Sign in");
+    private TextField usrField = new TextField("Username");
+    private PasswordField pwdField = new PasswordField("Password");
+    private Button signInBtn = new Button("Sign in");
+    private Notification notification = new Notification("SigIn Error", 4000);
 
     @Autowired
-    public LoginView(AuthenticationManager authenticationManager, CustomRequestCache requestCache, UserService userService) {
+    public LoginView(CustomRequestCache requestCache, AuthenticationManager authenticationManager) {
+        this.requestCache = requestCache;
+        this.authenticationManager = authenticationManager;
 
-        this.userService = userService;
+        addClassName("form");
 
-        // Sets the action aka the endpoint Spring Security is expecting the form data at.
-        login.setAction("login");
-        add(login);
-        add(new Anchor(RegistrationView.ROUTE, "Registration"));
+        usrField.setRequired(true);
+        pwdField.setRequired(true);
+        binder.forField(usrField).asRequired("User may not be empty")
+                .bind(User::getUsername, User::setUsername);
+        binder.forField(pwdField).asRequired("Password may not be empty")
+                .bind(User::getPasswordHash, User::setPasswordHash);
 
-        login.addLoginListener(e -> {
-            try {
-                // try to authenticate with given credentials, should always
-                // return not null or throw an {@link AuthenticationException}
-                final Authentication authentication =
-                        authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(
-                                        e.getUsername(),
-                                        e.getPassword()));
+        signInBtn.addClickListener(this::signIn);
+        signInBtn.addClassName("form__submit");
 
+        RouterLink signUpLink = new RouterLink("Sign Up", RegistrationView.class);
+        signUpLink.getStyle().set("text-align", "center");
 
-                // if authentication was successful we will update
-                // the security context and redirect to the page requested first
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                UI.getCurrent().navigate(requestCache.resolveRedirectUrl());
-            } catch (AuthenticationException ex) {
-                // show default error message
-                login.setError(true);
-            }
-        });
+        add(title, usrField, pwdField, signInBtn, signUpLink);
+        add(
+                new H6("Test credentials"),
+                new Span("user1;password"),
+                new Span("user2;password")
+        );
     }
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        // inform the user about an authentication error
-        if (beforeEnterEvent.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-            login.setError(true);
+    private void signIn(ClickEvent e) {
+        try {
+            // try to authenticate with given credentials, should always
+            // return not null or throw an {@link AuthenticationException}
+            final Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    usrField.getValue(),
+                                    pwdField.getValue()));
+
+
+            // if authentication was successful we will update
+            // the security context and redirect to the page requested first
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UI.getCurrent().navigate(requestCache.resolveRedirectUrl());
+        } catch (AuthenticationException ex) {
+            notification.open();
         }
     }
 }

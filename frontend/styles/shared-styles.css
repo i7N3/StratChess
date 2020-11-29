@@ -120,3 +120,21 @@ body {
 .validMove:before {
     background: #89e089;
 }
+
+.dashboard {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.form {
+    display: flex;
+    margin: 0 auto;
+    padding: 0 15px;
+    max-width: 420px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form__submit {
+    margin: 25px 0;
+}

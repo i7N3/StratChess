@@ -5,49 +5,64 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
-import cz.czu.nick.chess.backend.model.Game;
 import cz.czu.nick.chess.backend.service.GameService;
 import cz.czu.nick.chess.backend.service.UserService;
-import cz.czu.nick.chess.ui.components.BoardComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Route
 @CssImport("./styles/shared-styles.css")
 @PWA(name = "Chess", shortName = "Chess", description = "Chess", enableInstallPrompt = false)
-// TODO: fix double init after login
 public class MainView extends Div {
 
-    Game game;
-
     private GameService gameService;
-    private UserService userService;
 
-    VerticalLayout list = new VerticalLayout();
+    private ListBox list = new ListBox();
+    private Button startBtn = new Button("Start new game");
+    private Button updateBtn = new Button("Update list of available games");
 
     @Autowired
+    // TODO: fix double init after login
     public MainView(GameService gameService, UserService userService) {
         this.gameService = gameService;
-        this.userService = userService;
 
-        System.out.println("MainView");
-
-        Button startBtn = new Button("Start new game");
+        addClassName("dashboard");
         startBtn.addClickListener(this::startNewGame);
 
-        add(startBtn);
-        add(list);
+        add(startBtn, updateBtn, list);
 
         updateList();
     }
 
     private void startNewGame(ClickEvent event) {
-        game = gameService.createGame();
-        add(new BoardComponent(game));
-        updateList();
+        String sessionId = gameService.createGame();
+        navigateToGame(sessionId);
+    }
+
+    private void joinGame(ClickEvent event, String id) {
+        String sessionId = gameService.joinGame(id);
+        navigateToGame(sessionId);
+    }
+
+    private void navigateToGame(String sessionId) {
+        List<String> list = new ArrayList<String>();
+        Map<String, List<String>> parametersMap = new HashMap<String, List<String>>();
+
+        list.add(sessionId);
+        parametersMap.put("sessionId", list);
+
+        QueryParameters queryParameters = new QueryParameters(parametersMap);
+
+        this.getUI().ifPresent(ui -> ui.navigate(GameView.ROUTE, queryParameters));
     }
 
 
@@ -55,8 +70,6 @@ public class MainView extends Div {
         list.getElement().removeAllChildren();
 
         gameService.getAvailableGames().forEach((id, g) -> {
-            System.out.println(id);
-
             HorizontalLayout row = new HorizontalLayout();
 
             Button btn = new Button("join");
@@ -67,9 +80,5 @@ public class MainView extends Div {
 
             list.add(row);
         });
-    }
-
-    private void joinGame(ClickEvent event, String id) {
-        game = gameService.joinGame(id);
     }
 }
