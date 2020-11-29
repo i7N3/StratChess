@@ -44,7 +44,7 @@ public class RegistrationView extends FormLayout {
                 .bind(User::getPasswordHash, User::setPasswordHash);
 
         RouterLink signInLink = new RouterLink("Sign in", LoginView.class);
-        signInLink.getStyle().set("text-align", "center");
+        signInLink.addClassName("form__link");
 
         add(new H1("Registration"), usrField, pwdField, createButton(), signInLink);
     }

@@ -1,12 +1,12 @@
 package cz.czu.nick.chess.backend.model;
 
 // TODO: rename
-public class Moves {
+public class Move {
 
     FigureMoving fm;
     Board board;
 
-    public Moves(Board board) {
+    public Move(Board board) {
         this.board = board;
     }
 

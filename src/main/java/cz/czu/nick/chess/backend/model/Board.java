@@ -293,10 +293,10 @@ public class Board {
 
     private boolean canEatKing() {
         Square enemyKing = findEnemyKing();
-        Moves moves = new Moves(this);
+        Move move = new Move(this);
 
         for (FigureOnSquare fs : yieldFigures())
-            if (moves.canMove(new FigureMoving(fs, enemyKing)))
+            if (move.canMove(new FigureMoving(fs, enemyKing)))
                 return true;
 
         return false;

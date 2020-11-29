@@ -58,7 +58,7 @@ public class LoginView extends Div {
         signInBtn.addClassName("form__submit");
 
         RouterLink signUpLink = new RouterLink("Sign Up", RegistrationView.class);
-        signUpLink.getStyle().set("text-align", "center");
+        signUpLink.addClassName("form__link");
 
         add(title, usrField, pwdField, signInBtn, signUpLink);
         add(

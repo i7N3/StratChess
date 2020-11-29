@@ -1,6 +1,8 @@
 package cz.czu.nick.chess.backend.service;
 
+import cz.czu.nick.chess.backend.model.Color;
 import cz.czu.nick.chess.backend.model.Game;
+import cz.czu.nick.chess.backend.model.Player;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class GameService {
         String id = UUID.randomUUID().toString();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        game.setPlayer1(username);
+        game.setPlayer1(new Player(username, Color.white));
         games.put(id, game);
 
         // return session id
@@ -33,7 +35,7 @@ public class GameService {
         Game game = games.get(id);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        game.setPlayer2(username);
+        game.setPlayer2(new Player(username, Color.black));
         game.setStarted(true);
 
         games.put(id, game);

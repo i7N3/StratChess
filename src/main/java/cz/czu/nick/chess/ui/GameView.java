@@ -23,12 +23,14 @@ public class GameView extends Div implements HasUrlParameter<String> {
 
     @Autowired
     public GameView(GameService gameService) {
+
+        addClassName("container");
         this.gameService = gameService;
     }
 
     @Override
     public void setParameter(BeforeEvent event, @WildcardParameter String parameter) {
-        
+
         Location location = event.getLocation();
         QueryParameters queryParameters = location
                 .getQueryParameters();

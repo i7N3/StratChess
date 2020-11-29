@@ -121,9 +121,26 @@ body {
     background: #89e089;
 }
 
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 100%;
+    width: 100%;
+}
+
+@media (min-width: 1100px) {
+    .container {
+        max-width: 1100px;
+    }
+}
+
 .dashboard {
     margin: 0 auto;
+    display: flex;
     max-width: 800px;
+    flex-direction: column;
 }
 
 .form {
@@ -137,4 +154,8 @@ body {
 
 .form__submit {
     margin: 25px 0;
+}
+
+.form__link {
+    text-align: center;
 }

@@ -11,10 +11,10 @@ public class Game {
 
     public String fen;
     public Board board;
-    public Moves moves;
+    public Move move;
 
-    public String player1;
-    public String player2;
+    public Player player1;
+    public Player player2;
 
     public boolean isCheck;
     public boolean isCheckmate;
@@ -37,7 +37,7 @@ public class Game {
 //        this.fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R" +
 //                " w KQkq - 0 1";
         this.board = new Board(fen);
-        this.moves = new Moves(board);
+        this.move = new Move(board);
 
         setCheckFlags();
     }
@@ -45,14 +45,14 @@ public class Game {
     public Game(String fen) {
         this.fen = fen;
         this.board = new Board(fen);
-        this.moves = new Moves(board);
+        this.move = new Move(board);
         setCheckFlags();
     }
 
     public Game(Board board) {
         this.board = board;
         this.fen = board.fen;
-        this.moves = new Moves(board);
+        this.move = new Move(board);
         setCheckFlags();
     }
 
@@ -73,7 +73,7 @@ public class Game {
     public boolean isValidMove(String move) {
         FigureMoving fm = new FigureMoving(move);
 
-        if (!moves.canMove(fm))
+        if (!this.move.canMove(fm))
             return false;
         if (this.board.isCheckAfter(fm))
             return false;
@@ -82,9 +82,6 @@ public class Game {
     }
 
     public Game move(String move) {
-//        ArrayList<String> allMoves = getAllMoves();
-//        allMoves.forEach(m -> System.out.println(m));
-
         if (!isValidMove(move))
             return this;
 
@@ -136,7 +133,7 @@ public class Game {
                 for (Figure promotion : fs.figure.yieldPromotions(to)) {
                     FigureMoving fm = new FigureMoving(fs, to, promotion);
 
-                    if (this.moves.canMove(fm))
+                    if (this.move.canMove(fm))
                         if (!this.board.isCheckAfter(fm))
                             allMoves.add(fm);
                 }
