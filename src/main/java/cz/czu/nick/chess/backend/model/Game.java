@@ -56,6 +56,15 @@ public class Game {
         setCheckFlags();
     }
 
+    public Game(Board board, Player player1, Player player2) {
+        this.board = board;
+        this.fen = board.fen;
+        this.move = new Move(board);
+        this.player1 = player1;
+        this.player2 = player2;
+        setCheckFlags();
+    }
+
     private void setCheckFlags() {
         this.isCheck = board.isCheck();
         this.isCheckmate = false;
@@ -88,7 +97,7 @@ public class Game {
         FigureMoving fm = new FigureMoving(move);
 
         Board nextBoard = this.board.move(fm);
-        Game nextChess = new Game(nextBoard);
+        Game nextChess = new Game(nextBoard, getPlayer1(), getPlayer2());
 
         return nextChess;
     }

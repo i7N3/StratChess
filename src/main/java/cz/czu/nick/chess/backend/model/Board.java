@@ -82,7 +82,7 @@ public class Board {
     }
 
     private void initMoveColor(String v) {
-        this.moveColor = v == "b" ? Color.black : Color.white;
+        this.moveColor = v.equals("b") ? Color.black : Color.white;
     }
 
     private void initCastleFlags(String v) {

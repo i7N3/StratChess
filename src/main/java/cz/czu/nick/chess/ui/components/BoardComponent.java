@@ -1,15 +1,25 @@
 package cz.czu.nick.chess.ui.components;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.shared.Registration;
 import cz.czu.nick.chess.backend.model.*;
+import cz.czu.nick.chess.backend.service.Broadcaster;
+import cz.czu.nick.chess.backend.service.GameService;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class BoardComponent extends Div {
 
+    private GameService gameService;
+
     private Game game;
+    private String sessionId;
 
     private Figure selectedFigure = Figure.none;
     private ChessPieceComponent selectedChessPiece = new ChessPieceComponent(Figure.none);
@@ -20,9 +30,10 @@ public class BoardComponent extends Div {
     private Div board = new Div();
     private ChessPieceComponent[][] chessPieces = new ChessPieceComponent[8][8];
 
-    public BoardComponent(Game game) {
-
+    public BoardComponent(Game game, String sessionId, GameService gameService) {
         this.game = game;
+        this.sessionId = sessionId;
+        this.gameService = gameService;
 
         board.addClassName("board");
 
@@ -92,6 +103,16 @@ public class BoardComponent extends Div {
         updateBoard();
 
         selectedFigure = Figure.none;
+
+        // send push event to client
+        String username;
+        if (game.getMoveColor() == game.player1.getColor()) {
+            username = game.player2.getUsername();
+        } else {
+            username = game.player1.getUsername();
+        }
+        Broadcaster.broadcast(username, game.getFen());
+
     }
 
     private void markActiveSquare(ChessPieceComponent piece, Figure figure, Square square) {
@@ -145,6 +166,28 @@ public class BoardComponent extends Div {
                 board.add(chessPiece);
             }
         }
+    }
+
+    Registration broadcasterRegistration;
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        UI ui = attachEvent.getUI();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        broadcasterRegistration = Broadcaster.register(username, newFen -> {
+            ui.access(() -> {
+                game = new Game(new Board(newFen), game.getPlayer1(), game.getPlayer2());
+                gameService.setGame(sessionId, game);
+                updateBoard();
+            });
+        });
+    }
+
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        broadcasterRegistration.remove();
+        broadcasterRegistration = null;
     }
 
 //    @EventListener

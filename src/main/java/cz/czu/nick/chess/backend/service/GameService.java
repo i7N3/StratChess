@@ -44,6 +44,10 @@ public class GameService {
         return id;
     }
 
+    public void setGame(String id, Game game) {
+        games.put(id, game);
+    }
+
     public Game getGameBySessionId(String id) {
         return games.get(id);
     }
