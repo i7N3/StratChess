@@ -36,12 +36,16 @@ public class GameService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         game.setPlayer2(new Player(username, Color.black));
-        game.setStarted(true);
+        game.start();
 
         games.put(id, game);
 
         // return session id
         return id;
+    }
+
+    public void setGame(String id, Game game) {
+        games.put(id, game);
     }
 
     public Game getGameBySessionId(String id) {

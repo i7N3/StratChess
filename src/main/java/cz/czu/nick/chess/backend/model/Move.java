@@ -1,6 +1,5 @@
 package cz.czu.nick.chess.backend.model;
 
-// TODO: rename
 public class Move {
 
     FigureMoving fm;

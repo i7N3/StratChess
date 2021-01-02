@@ -1,11 +1,12 @@
 package cz.czu.nick.chess.ui;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -48,12 +49,16 @@ public class LoginView extends Div {
         addClassName("form");
 
         usrField.setRequired(true);
+        usrField.setAutofocus(true);
         pwdField.setRequired(true);
         binder.forField(usrField).asRequired("User may not be empty")
                 .bind(User::getUsername, User::setUsername);
         binder.forField(pwdField).asRequired("Password may not be empty")
                 .bind(User::getPasswordHash, User::setPasswordHash);
 
+        usrField.addKeyPressListener(Key.ENTER, this::signIn);
+        pwdField.addKeyPressListener(Key.ENTER, this::signIn);
+        
         signInBtn.addClickListener(this::signIn);
         signInBtn.addClassName("form__submit");
 
@@ -68,7 +73,7 @@ public class LoginView extends Div {
         );
     }
 
-    private void signIn(ClickEvent e) {
+    private void signIn(ComponentEvent e) {
         try {
             // try to authenticate with given credentials, should always
             // return not null or throw an {@link AuthenticationException}
