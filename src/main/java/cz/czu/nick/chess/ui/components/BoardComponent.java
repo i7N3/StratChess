@@ -17,6 +17,8 @@ import java.util.stream.IntStream;
 public class BoardComponent extends Div {
 
     private GameService gameService;
+    private Registration broadcasterRegistration;
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
     private Game game;
     private String sessionId;
@@ -28,6 +30,8 @@ public class BoardComponent extends Div {
     private Square from = null;
 
     private Div board = new Div();
+    Div wrapperInnerTop = new Div();
+    Div wrapperInnerBottom = new Div();
     private ChessPieceComponent[][] chessPieces = new ChessPieceComponent[8][8];
 
     public BoardComponent(Game game, String sessionId, GameService gameService) {
@@ -46,27 +50,10 @@ public class BoardComponent extends Div {
         Div bottom = new Div();
         bottom.addClassName("bottom");
 
-        Div wrapperInnerTop = new Div();
         wrapperInnerTop.addClassName("wrapper-inner");
-
-        Div wrapperInnerBottom = new Div();
         wrapperInnerBottom.addClassName("wrapper-inner");
 
-        IntStream.range('A', 'I').forEach(i -> {
-            Div boxInner = new Div();
-            boxInner.addClassName("box-inner");
-            boxInner.setText(Character.toString((char) i));
-
-            wrapperInnerTop.add(boxInner);
-        });
-
-        IntStream.range('A', 'I').forEach(i -> {
-            Div boxInner = new Div();
-            boxInner.addClassName("box-inner");
-            boxInner.setText(Character.toString((char) i));
-
-            wrapperInnerBottom.add(boxInner);
-        });
+        init();
 
         top.add(wrapperInnerTop);
         wrapper.add(top);
@@ -80,7 +67,35 @@ public class BoardComponent extends Div {
         add(wrapper);
     }
 
-    private void setSelectedFigure(ClickEvent event, ChessPieceComponent piece, Figure figure, Square square) {
+    private void init() {
+        // First player is always WHITE
+        boolean isFirstPlayer = username == game.player1.getUsername();
+
+        if (isFirstPlayer) {
+            IntStream.range('A', 'I').forEach(this::printTopAndBottom);
+        } else {
+            IntStream.range('A', 'I').map(i -> 'I' - i + 'A' - 1).forEach(this::printTopAndBottom);
+        }
+    }
+
+    private void printTopAndBottom(int i) {
+        Div boxInner1 = new Div();
+        boxInner1.addClassName("box-inner");
+        boxInner1.setText(Character.toString((char) i));
+
+        Div boxInner2 = new Div();
+        boxInner2.addClassName("box-inner");
+        boxInner2.setText(Character.toString((char) i));
+
+        wrapperInnerTop.add(boxInner1);
+        wrapperInnerBottom.add(boxInner2);
+    }
+
+    private void handleCell(ClickEvent event, ChessPieceComponent piece, Figure figure, Square square) {
+        if (!game.isStarted) return;
+        if (game.currentPlayer.getUsername() != username) return;
+        if (game.currentPlayer.getColor() != game.getMoveColor()) return;
+
         if (figure != Figure.none && game.getMoveColor() == Figure.getColor(figure)) {
             clear();
             markActiveSquare(piece, figure, square);
@@ -104,15 +119,18 @@ public class BoardComponent extends Div {
 
         selectedFigure = Figure.none;
 
-        // send push event to client
+        // send push event to client on move
+        broadcast();
+    }
+
+    private void broadcast() {
         String username;
         if (game.getMoveColor() == game.player1.getColor()) {
-            username = game.player2.getUsername();
-        } else {
             username = game.player1.getUsername();
+        } else {
+            username = game.player2.getUsername();
         }
         Broadcaster.broadcast(username, game.getFen());
-
     }
 
     private void markActiveSquare(ChessPieceComponent piece, Figure figure, Square square) {
@@ -148,27 +166,47 @@ public class BoardComponent extends Div {
     }
 
     private void updateBoard() {
+        // First player is always WHITE
+        boolean isFirstPlayer = username == game.player1.getUsername();
+
         board.getElement().removeAllChildren();
 
-        for (int y = 7; y >= 0; y--) {
-            for (int x = 0; x < 8; x++) {
-                char f = game.getFigureAt(x, y);
+        if (isFirstPlayer) {
+            for (int y = 7; y >= 0; y--) {
+                for (int x = 0; x < 8; x++) {
+                    char f = game.getFigureAt(x, y);
 
-                Square square = new Square(x, y);
-                Figure figure = Figure.getFigureType(f);
-                ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
+                    Square square = new Square(x, y);
+                    Figure figure = Figure.getFigureType(f);
+                    ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
 
-                chessPiece.addClickListener(e -> {
-                    setSelectedFigure(e, chessPiece, figure, square);
-                });
+                    chessPiece.addClickListener(e -> {
+                        handleCell(e, chessPiece, figure, square);
+                    });
 
-                chessPieces[x][y] = chessPiece;
-                board.add(chessPiece);
+                    chessPieces[x][y] = chessPiece;
+                    board.add(chessPiece);
+                }
+            }
+        } else {
+            for (int y = 0; y < 8; y++) {
+                for (int x = 7; x >= 0; x--) {
+                    char f = game.getFigureAt(x, y);
+
+                    Square square = new Square(x, y);
+                    Figure figure = Figure.getFigureType(f);
+                    ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
+
+                    chessPiece.addClickListener(e -> {
+                        handleCell(e, chessPiece, figure, square);
+                    });
+
+                    chessPieces[x][y] = chessPiece;
+                    board.add(chessPiece);
+                }
             }
         }
     }
-
-    Registration broadcasterRegistration;
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
@@ -177,7 +215,7 @@ public class BoardComponent extends Div {
 
         broadcasterRegistration = Broadcaster.register(username, newFen -> {
             ui.access(() -> {
-                game = new Game(new Board(newFen), game.getPlayer1(), game.getPlayer2());
+                game = new Game(new Board(newFen), game);
                 gameService.setGame(sessionId, game);
                 updateBoard();
             });
@@ -189,12 +227,4 @@ public class BoardComponent extends Div {
         broadcasterRegistration.remove();
         broadcasterRegistration = null;
     }
-
-//    @EventListener
-//    public void handleMoveEvent (MoveEvent event, @Autowired GameService gameService) {
-//        Game game = event.getGame();
-//        this.updateGame(game, gameService);
-//        System.out.println(game.fen);
-//        add(wrapper1);
-//    }
 }

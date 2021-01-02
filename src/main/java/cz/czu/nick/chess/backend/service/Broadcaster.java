@@ -27,9 +27,5 @@ public class Broadcaster {
     public static synchronized void broadcast(String username, String message) {
         Consumer<String> l = listeners.get(username);
         executor.execute(() -> l.accept(message));
-//
-//        for (Consumer<String> listener : listeners.values()) {
-//
-//        }
     }
 }

@@ -1,6 +1,7 @@
 package cz.czu.nick.chess.ui;
 
-import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -36,6 +37,7 @@ public class RegistrationView extends FormLayout {
 
         addClassName("form");
 
+        usrField.setAutofocus(true);
         usrField.setRequired(true);
         pwdField.setRequired(true);
         binder.forField(usrField).asRequired("User may not be empty")
@@ -46,16 +48,19 @@ public class RegistrationView extends FormLayout {
         RouterLink signInLink = new RouterLink("Sign in", LoginView.class);
         signInLink.addClassName("form__link");
 
+        usrField.addKeyPressListener(Key.ENTER, this::register);
+        pwdField.addKeyPressListener(Key.ENTER, this::register);
+
         add(new H1("Registration"), usrField, pwdField, createButton(), signInLink);
     }
 
     private Button createButton() {
-        Button button = new Button("Sign Up", this::auth);
+        Button button = new Button("Sign Up", this::register);
         button.addClassName("form__submit");
         return button;
     }
 
-    private void auth(ClickEvent event) {
+    private void register(ComponentEvent event) {
         User user = new User();
         if (binder.writeBeanIfValid(user)) {
             userService.saveUser(user);

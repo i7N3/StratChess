@@ -48,47 +48,5 @@ public class GameView extends Div implements HasUrlParameter<String> {
         add(new H1("Game"));
         add(boardComponent);
     }
-
-//    @Override
-//    protected void onAttach(AttachEvent attachEvent) {
-//        add(new Span("Waiting for updates"));
-//
-//        // Start the data feed thread
-//        thread = new FeederThread(attachEvent.getUI(), this);
-//        thread.start();
-//    }
-//
-//    @Override
-//    protected void onDetach(DetachEvent detachEvent) {
-//        // Cleanup
-//        thread.interrupt();
-//        thread = null;
-//    }
-
-//    private static class FeederThread extends Thread {
-//        private final UI ui;
-//        private final GameView view;
-//
-//        private int count = 0;
-//
-//        public FeederThread(UI ui, GameView view) {
-//            this.ui = ui;
-//            this.view = view;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try {
-//                // Update the data for a while
-//                while (count < 10) {
-//                    ui.access(() -> {
-//                        view.add(new Span(""));
-//                    });
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
 

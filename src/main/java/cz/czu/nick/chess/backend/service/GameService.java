@@ -36,7 +36,7 @@ public class GameService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         game.setPlayer2(new Player(username, Color.black));
-        game.setStarted(true);
+        game.start();
 
         games.put(id, game);
 

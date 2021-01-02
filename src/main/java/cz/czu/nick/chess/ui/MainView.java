@@ -11,7 +11,6 @@ import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import cz.czu.nick.chess.backend.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,15 +22,18 @@ import java.util.Map;
 
 @Route
 @CssImport("./styles/shared-styles.css")
-@PWA(name = "Chess", shortName = "Chess", description = "Chess", enableInstallPrompt = false)
+// disable because of bug:
+// https://vaadin.com/forum/thread/18157570/always-redirect-to-offline-page-after-login
+//@PWA(name = "Chess", shortName = "Chess", description = "Chess", enableInstallPrompt = false)
 public class MainView extends Div {
     // TODO: fix double init after login
 
-    private GameService gameService;
+    GameService gameService;
 
-    private ListBox list = new ListBox();
-    private Button startBtn = new Button("Start new game");
-    private Button updateBtn = new Button("Update list of available games");
+    ListBox list = new ListBox();
+    Paragraph text = new Paragraph("");
+    Button startBtn = new Button("Start new game");
+    Button updateBtn = new Button("Update list of available games");
 
     @Autowired
     public MainView(GameService gameService) {
@@ -39,8 +41,11 @@ public class MainView extends Div {
 
         addClassName("dashboard");
         startBtn.addClickListener(this::startNewGame);
+        updateBtn.addClickListener(e -> {
+            updateList();
+        });
 
-        add(new H1("Dashboard"), startBtn, updateBtn, new H2("Available games"), list);
+        add(new H1("Dashboard"), startBtn, updateBtn, new H2("Available games"), text, list);
 
         updateList();
     }
@@ -67,13 +72,13 @@ public class MainView extends Div {
         this.getUI().ifPresent(ui -> ui.navigate(GameView.ROUTE, queryParameters));
     }
 
-
     private void updateList() {
         if (gameService.getAvailableGames().size() == 0) {
-            add(new Paragraph("No games available"));
+            text.setText("No games available");
             return;
         }
 
+        text.setText("");
         list.getElement().removeAllChildren();
 
         gameService.getAvailableGames().forEach((id, g) -> {
