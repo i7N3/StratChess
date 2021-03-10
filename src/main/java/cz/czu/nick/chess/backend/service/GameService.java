@@ -20,36 +20,48 @@ public class GameService {
 
     public String createGame() {
         Game game = new Game();
-        String id = UUID.randomUUID().toString();
+        String sessionId = UUID.randomUUID().toString();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         game.setPlayer1(new Player(username, Color.white));
-        games.put(id, game);
+        games.put(sessionId, game);
 
-        // return session id
-        return id;
+        return sessionId;
     }
 
-    public String joinGame(String id) {
-        // TODO: handle exp
-        Game game = games.get(id);
+    public void joinGame(String sessionId) {
+        if (sessionId == null) return;
+        if (sessionId.length() == 0) return;
+
+        Game game = games.get(sessionId);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        game.setPlayer2(new Player(username, Color.black));
-        game.start();
+        if (game == null) return;
 
-        games.put(id, game);
+        if (game.getPlayer1() == null) {
+            game.setPlayer1(new Player(username, Color.white));
+        } else {
+            game.setPlayer2(new Player(username, Color.black));
+        }
 
-        // return session id
-        return id;
+        if (!game.isStarted) {
+            game.start();
+        }
+
+        games.put(sessionId, game);
     }
 
     public void setGame(String id, Game game) {
         games.put(id, game);
     }
 
-    public Game getGameBySessionId(String id) {
-        return games.get(id);
+    public void removeGame(String id) {
+        games.remove(id);
+    }
+
+    public Game getGameBySessionId(String sessionId) {
+        return games.get(sessionId);
+
     }
 
     public Map<String, Game> getAvailableGames() {

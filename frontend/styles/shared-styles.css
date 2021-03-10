@@ -143,6 +143,13 @@ body {
     flex-direction: column;
 }
 
+.dashboard__nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .form {
     display: flex;
     margin: 0 auto;

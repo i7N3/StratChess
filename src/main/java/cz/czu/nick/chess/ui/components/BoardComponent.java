@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+// TODO: WIN / DRAW IN THE GAME
 public class BoardComponent extends Div {
 
     private GameService gameService;
@@ -166,29 +167,29 @@ public class BoardComponent extends Div {
     }
 
     private void updateBoard() {
-        // First player is always WHITE
-        boolean isFirstPlayer = username == game.player1.getUsername();
+            // First player is always WHITE
+            boolean isFirstPlayer = username == game.player1.getUsername();
 
-        board.getElement().removeAllChildren();
+            board.getElement().removeAllChildren();
 
-        if (isFirstPlayer) {
-            for (int y = 7; y >= 0; y--) {
-                for (int x = 0; x < 8; x++) {
-                    char f = game.getFigureAt(x, y);
+            if (isFirstPlayer) {
+                for (int y = 7; y >= 0; y--) {
+                    for (int x = 0; x < 8; x++) {
+                        char f = game.getFigureAt(x, y);
 
-                    Square square = new Square(x, y);
-                    Figure figure = Figure.getFigureType(f);
-                    ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
+                        Square square = new Square(x, y);
+                        Figure figure = Figure.getFigureType(f);
+                        ChessPieceComponent chessPiece = new ChessPieceComponent(figure, square);
 
-                    chessPiece.addClickListener(e -> {
-                        handleCell(e, chessPiece, figure, square);
-                    });
+                        chessPiece.addClickListener(e -> {
+                            handleCell(e, chessPiece, figure, square);
+                        });
 
-                    chessPieces[x][y] = chessPiece;
-                    board.add(chessPiece);
+                        chessPieces[x][y] = chessPiece;
+                        board.add(chessPiece);
+                    }
                 }
-            }
-        } else {
+            } else {
             for (int y = 0; y < 8; y++) {
                 for (int x = 7; x >= 0; x--) {
                     char f = game.getFigureAt(x, y);
@@ -223,7 +224,22 @@ public class BoardComponent extends Div {
     }
 
     @Override
+    // TODO: handle closing tab & manual changing url
     protected void onDetach(DetachEvent detachEvent) {
+        game.setStarted(false);
+        if (game.getPlayer1() != null && game.getPlayer1().getUsername().equals(username)) {
+            game.setPlayer1(null);
+        }
+        if (game.getPlayer2() != null && game.getPlayer2().getUsername().equals(username)) {
+            game.setPlayer2(null);
+        }
+
+        if (game.getPlayer1() == null && game.getPlayer2() == null) {
+            gameService.removeGame(sessionId);
+        } else {
+            gameService.setGame(sessionId, game);
+        }
+
         broadcasterRegistration.remove();
         broadcasterRegistration = null;
     }

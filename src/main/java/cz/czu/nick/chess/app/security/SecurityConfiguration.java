@@ -122,5 +122,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // (production mode) static resources
                 "/frontend-es5/**", "/frontend-es6/**");
     }
-
 }

@@ -22,21 +22,19 @@ public class Game {
     public boolean isStarted = false;
     /*
      * TODO:
-     * Ничья может быть в случае если:
+     * A draw occur if:
      *
-     * - конь + король vs. король
-     * - слон + король vs. король
-     * - король vs. король
+     * - knight + king vs. king
+     * - bishop + king vs. king
+     * - king vs. king
      * - drawNumber > 50
-     * - 3x кратное повторение ситуации/ходов -> fen1 === fen2
+     * - 3x repetition of moves
      *
      * */
     public boolean isStalemate;
 
     public Game() {
         fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-//        this.fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R" +
-//                " w KQkq - 0 1";
         board = new Board(fen);
         move = new Move(board);
 

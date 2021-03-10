@@ -25,7 +25,6 @@ public class FigureMovingTests {
 
     @Test
     public void deltaX() {
-        // 0 - 0 must be 0
         Assert.assertEquals("to.x - from.x must be 0", 0, deltaX);
     }
 

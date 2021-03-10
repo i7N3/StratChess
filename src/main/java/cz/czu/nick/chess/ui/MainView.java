@@ -19,33 +19,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @Route
 @CssImport("./styles/shared-styles.css")
-// disable because of bug:
-// https://vaadin.com/forum/thread/18157570/always-redirect-to-offline-page-after-login
-//@PWA(name = "Chess", shortName = "Chess", description = "Chess", enableInstallPrompt = false)
 public class MainView extends Div {
-    // TODO: fix double init after login
-
     GameService gameService;
 
     ListBox list = new ListBox();
     Paragraph text = new Paragraph("");
-    Button startBtn = new Button("Start new game");
-    Button updateBtn = new Button("Update list of available games");
+    Button startBtn = new Button("Spustit novou hru");
+    Button updateBtn = new Button("Aktualizovat seznam dostupných her");
+    Button logoutBtn = new Button("Odhlásit se");
 
     @Autowired
     public MainView(GameService gameService) {
         this.gameService = gameService;
 
         addClassName("dashboard");
+        Div wrapper = new Div();
+        wrapper.addClassName("dashboard__nav");
+        H1 title = new H1("Domovská stránka");
+
         startBtn.addClickListener(this::startNewGame);
         updateBtn.addClickListener(e -> {
             updateList();
         });
+        logoutBtn.addClickListener(e -> {
+            this.getUI().ifPresent(ui -> ui.getPage().executeJs("window.location.href='/logout'"));
+        });
+        wrapper.add(startBtn, updateBtn, logoutBtn);
 
-        add(new H1("Dashboard"), startBtn, updateBtn, new H2("Available games"), text, list);
+        add(title, wrapper, new H2("Dostupné hry"), text, list);
 
         updateList();
     }
@@ -56,8 +59,8 @@ public class MainView extends Div {
     }
 
     private void joinGame(ClickEvent event, String id) {
-        String sessionId = gameService.joinGame(id);
-        navigateToGame(sessionId);
+        gameService.joinGame(id);
+        navigateToGame(id);
     }
 
     private void navigateToGame(String sessionId) {
@@ -73,18 +76,18 @@ public class MainView extends Div {
     }
 
     private void updateList() {
-        if (gameService.getAvailableGames().size() == 0) {
-            text.setText("No games available");
-            return;
-        }
-
         text.setText("");
         list.getElement().removeAllChildren();
+
+        if (gameService.getAvailableGames().size() == 0) {
+            text.setText("Nejsou k dispozici žádné hry");
+            return;
+        }
 
         gameService.getAvailableGames().forEach((id, g) -> {
             HorizontalLayout row = new HorizontalLayout();
 
-            Button btn = new Button("join");
+            Button btn = new Button("Připojit se");
             btn.addClickListener(e -> this.joinGame(e, id));
 
             row.add(new Paragraph(id));
