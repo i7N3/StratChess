@@ -3,21 +3,13 @@ package cz.czu.nick.chess.backend.model;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class FigureMoving {
-
-    @Getter
-    @Setter
     Figure figure;
-    @Getter
-    @Setter
     Square from;
-    @Getter
-    @Setter
     Square to;
-
     // When Pawn reaches its eighth rank
-    @Getter
-    @Setter
     Figure promotion = Figure.none;
 
     public static FigureMoving none = new FigureMoving();

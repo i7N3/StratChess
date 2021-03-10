@@ -120,3 +120,49 @@ body {
 .validMove:before {
     background: #89e089;
 }
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 100%;
+    width: 100%;
+}
+
+@media (min-width: 1100px) {
+    .container {
+        max-width: 1100px;
+    }
+}
+
+.dashboard {
+    margin: 0 auto;
+    display: flex;
+    max-width: 800px;
+    flex-direction: column;
+}
+
+.dashboard__nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form {
+    display: flex;
+    margin: 0 auto;
+    padding: 0 15px;
+    max-width: 420px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form__submit {
+    margin: 25px 0;
+}
+
+.form__link {
+    text-align: center;
+}

@@ -2,52 +2,73 @@ package cz.czu.nick.chess.backend.service;
 
 import cz.czu.nick.chess.backend.model.Color;
 import cz.czu.nick.chess.backend.model.Game;
-import cz.czu.nick.chess.backend.repository.GameRepository;
+import cz.czu.nick.chess.backend.model.Player;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
+@Scope("singleton")
 public class GameService {
 
-    private Game game = new Game();
-    private GameRepository gameRepository;
+    private Map<String, Game> games = new ConcurrentHashMap<>();
 
-    public GameService() {
+    public String createGame() {
+        Game game = new Game();
+        String sessionId = UUID.randomUUID().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        game.setPlayer1(new Player(username, Color.white));
+        game.setCurrentPlayer(game.player1);
+        games.put(sessionId, game);
+
+        return sessionId;
     }
 
-    public GameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
+    public void joinGame(String sessionId) {
+        if (sessionId == null) return;
+        if (sessionId.length() == 0) return;
+
+        Game game = games.get(sessionId);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (game == null) return;
+
+        if (game.getPlayer1() == null) {
+            game.setPlayer1(new Player(username, Color.white));
+        } else {
+            game.setPlayer2(new Player(username, Color.black));
+        }
+
+        if (!game.isStarted) {
+            game.start();
+        }
+
+        games.put(sessionId, game);
     }
 
-    public char getFigureAt(int x, int y) {
-        return game.getFigureAt(x, y);
+    public void setGame(String id, Game game) {
+        games.put(id, game);
     }
 
-    public Game move(String move) {
-        this.game = game.move(move);
-        return this.game;
+    public void removeGame(String id) {
+        games.remove(id);
     }
 
-    public Color getMoveColor() {
-        return this.game.board.moveColor;
-    }
-
-    public ArrayList<String> getAllMoves() {
-        return this.game.getAllMoves();
+    public Game getGameBySessionId(String sessionId) {
+        return games.get(sessionId);
 
     }
 
-//    public ArrayList<String> getValidMoves() {
-//        return this.game.
-//    }
-
-
-//    @PostConstruct
-//    public void populateTestData() {
-//        if (gameRepository.count() == 0) {
-//            Game game = new Game();
-//            gameRepository.save(game);
-//        }
-//    }
+    public Map<String, Game> getAvailableGames() {
+        return games.entrySet()
+                .stream()
+                .filter(map -> !map.getValue().isStarted())
+                .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+    }
 }

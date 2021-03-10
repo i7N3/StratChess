@@ -5,59 +5,71 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Game {
 
-    @Getter
-    @Setter
-    public Board board;
-    @Getter
-    @Setter
-    public Moves moves;
-    @Getter
-    @Setter
     public String fen;
-    @Getter
-    @Setter
+    public Board board;
+    public Move move;
+
+    public Player player1;
+    public Player player2;
+    public Player currentPlayer;
+
     public boolean isCheck;
-    @Getter
-    @Setter
     public boolean isCheckmate;
+    public boolean isStarted = false;
     /*
      * TODO:
-     * Ничья может быть в случае если:
+     * A draw occur if:
      *
-     * - конь + король vs. король
-     * - слон + король vs. король
-     * - король vs. король
+     * - knight + king vs. king
+     * - bishop + king vs. king
+     * - king vs. king
      * - drawNumber > 50
-     * - 3x кратное повторение ситуации/ходов -> fen1 === fen2
+     * - 3x repetition of moves
      *
      * */
-    @Getter
-    @Setter
     public boolean isStalemate;
 
     public Game() {
-//        this.fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        this.fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R" +
-                " w KQkq - 0 1";
-        this.board = new Board(fen);
-        this.moves = new Moves(board);
+        fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        board = new Board(fen);
+        move = new Move(board);
 
         setCheckFlags();
     }
 
+    // This constructor only for testing
     public Game(String fen) {
         this.fen = fen;
-        this.board = new Board(fen);
-        this.moves = new Moves(board);
+        board = new Board(fen);
+        move = new Move(board);
+
+        this.player1 = new Player("user1", Color.white);
+        this.player2 = new Player("user2", Color.black);
+
         setCheckFlags();
     }
 
-    public Game(Board board) {
+    public Game(Board board, Game game) {
+        // copy
+        this.player1 = game.player1;
+        this.player2 = game.player2;
+        this.isCheck = game.isCheck;
+        this.isStarted = game.isStarted;
+        this.isCheckmate = game.isCheckmate;
+
+        if (board.getMoveColor() == Color.white) {
+            this.currentPlayer = this.player1;
+        } else {
+            this.currentPlayer = this.player2;
+        }
+
         this.board = board;
         this.fen = board.fen;
-        this.moves = new Moves(board);
+        this.move = new Move(board);
         setCheckFlags();
     }
 
@@ -78,7 +90,7 @@ public class Game {
     public boolean isValidMove(String move) {
         FigureMoving fm = new FigureMoving(move);
 
-        if (!moves.canMove(fm))
+        if (!this.move.canMove(fm))
             return false;
         if (this.board.isCheckAfter(fm))
             return false;
@@ -86,19 +98,34 @@ public class Game {
         return true;
     }
 
-    public Game move(String move) {
-//        ArrayList<String> allMoves = getAllMoves();
-//        allMoves.forEach(m -> System.out.println(m));
+    public void start() {
+        setStarted(true);
+    }
 
+    public Game move(String move) {
         if (!isValidMove(move))
             return this;
 
         FigureMoving fm = new FigureMoving(move);
 
-        Board nextBoard = this.board.move(fm);
-        Game nextChess = new Game(nextBoard);
+        Board nextBoard = board.move(fm);
+        Game nextChess = new Game(nextBoard, this);
+        nextChess.flipCurrentPlayer();
 
         return nextChess;
+    }
+
+    private void flipCurrentPlayer() {
+        if (currentPlayer.getUsername() == player1.getUsername()) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
+    }
+
+
+    public Color getMoveColor() {
+        return this.board.getMoveColor();
     }
 
     public char getFigureAt(int x, int y) {
@@ -137,7 +164,7 @@ public class Game {
                 for (Figure promotion : fs.figure.yieldPromotions(to)) {
                     FigureMoving fm = new FigureMoving(fs, to, promotion);
 
-                    if (this.moves.canMove(fm))
+                    if (this.move.canMove(fm))
                         if (!this.board.isCheckAfter(fm))
                             allMoves.add(fm);
                 }
