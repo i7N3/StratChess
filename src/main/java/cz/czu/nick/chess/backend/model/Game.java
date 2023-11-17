@@ -54,7 +54,6 @@ public class Game {
     }
 
     public Game(Board board, Game game) {
-        // copy
         this.player1 = game.player1;
         this.player2 = game.player2;
         this.isCheck = game.isCheck;

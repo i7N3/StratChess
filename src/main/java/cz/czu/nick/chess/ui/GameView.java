@@ -50,7 +50,7 @@ public class GameView extends Div implements  HasUrlParameter<String>, AfterNavi
                 game = gameService.getGameBySessionId(sessionId);
                 if (game != null) {
                     boardComponent = new BoardComponent(game, sessionId, gameService);
-                    add(new H1("Hra"));
+                    add(new H1("The game"));
                     add(boardComponent);
                 } else {
                     sessionId = null;

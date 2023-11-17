@@ -35,11 +35,11 @@ public class LoginView extends Div {
 
     private final Binder<User> binder = new Binder<>();
 
-    private H1 title = new H1("Přihlášení");
-    private TextField usrField = new TextField("Přezdívka");
-    private PasswordField pwdField = new PasswordField("Heslo");
-    private Button signInBtn = new Button("Přihlásit se");
-    private Notification notification = new Notification("Oops, něco se povedlo, zkus znovu!", 4000);
+    private H1 title = new H1("Login");
+    private TextField usrField = new TextField("Username");
+    private PasswordField pwdField = new PasswordField("Password");
+    private Button signInBtn = new Button("Sign in");
+    private Notification notification = new Notification("Oops, something went wrong", 4000);
 
     @Autowired
     public LoginView(CustomRequestCache requestCache, AuthenticationManager authenticationManager) {
@@ -51,15 +51,15 @@ public class LoginView extends Div {
         usrField.setRequired(true);
         pwdField.setRequired(true);
         usrField.setAutofocus(true);
-        binder.forField(usrField).asRequired("Přezdívka nesmí být prázdný")
+        binder.forField(usrField).asRequired("Username cannot be empty")
                 .withValidator(
                         username -> username.length() >= 4,
-                        "Přezdívka musí obsahovat alespoň 4 znaků")
+                        "Username should containt at least 4 chars")
                 .bind(User::getUsername, User::setUsername);
-        binder.forField(pwdField).asRequired("Heslo nesmí být prázdný")
+        binder.forField(pwdField).asRequired("Password cannot be empty")
                 .withValidator(
                         pwd -> pwd.length() >= 6,
-                        "Heslo musí obsahovat alespoň 6 znaků")
+                        "Password should contain at least 6 chars")
                 .bind(User::getPasswordHash, User::setPasswordHash);
 
         usrField.addKeyPressListener(Key.ENTER, this::signIn);
@@ -68,12 +68,12 @@ public class LoginView extends Div {
         signInBtn.addClickListener(this::signIn);
         signInBtn.addClassName("form__submit");
 
-        RouterLink signUpLink = new RouterLink("Registrace", RegistrationView.class);
+        RouterLink signUpLink = new RouterLink("Registration", RegistrationView.class);
         signUpLink.addClassName("form__link");
 
         add(title, usrField, pwdField, signInBtn, signUpLink);
         add(
-                new H6("Testovací údaje (školní projekt): "),
+                new H6("Testing credentials: "),
                 new Span("user1;password"),
                 new Span("user2;password")
         );
@@ -89,7 +89,7 @@ public class LoginView extends Div {
                                     usrField.getValue(),
                                     pwdField.getValue()));
 
-            notification.setText("Přihlášení proběhlo úspěšně");
+            notification.setText("Signed in successfully");
             notification.open();
 
             // if authentication was successful we will update
@@ -97,7 +97,7 @@ public class LoginView extends Div {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UI.getCurrent().navigate(requestCache.resolveRedirectUrl());
         } catch (AuthenticationException ex) {
-            notification.setText("Oops, něco se povedlo, zkus znovu!");
+            notification.setText("Oops, something went wrong");
             notification.open();
         }
     }

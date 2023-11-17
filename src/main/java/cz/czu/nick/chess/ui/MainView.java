@@ -26,9 +26,9 @@ public class MainView extends Div {
 
     ListBox list = new ListBox();
     Paragraph text = new Paragraph("");
-    Button startBtn = new Button("Spustit novou hru");
-    Button updateBtn = new Button("Aktualizovat seznam dostupných her");
-    Button logoutBtn = new Button("Odhlásit se");
+    Button startBtn = new Button("Start new game");
+    Button updateBtn = new Button("Refresh list of available games");
+    Button logoutBtn = new Button("Logout");
 
     @Autowired
     public MainView(GameService gameService) {
@@ -37,7 +37,7 @@ public class MainView extends Div {
         addClassName("dashboard");
         Div wrapper = new Div();
         wrapper.addClassName("dashboard__nav");
-        H1 title = new H1("Domovská stránka");
+        H1 title = new H1("Home page");
 
         startBtn.addClickListener(this::startNewGame);
         updateBtn.addClickListener(e -> {
@@ -48,7 +48,7 @@ public class MainView extends Div {
         });
         wrapper.add(startBtn, updateBtn, logoutBtn);
 
-        add(title, wrapper, new H2("Dostupné hry"), text, list);
+        add(title, wrapper, new H2("Available games"), text, list);
 
         updateList();
     }
@@ -80,14 +80,14 @@ public class MainView extends Div {
         list.getElement().removeAllChildren();
 
         if (gameService.getAvailableGames().size() == 0) {
-            text.setText("Nejsou k dispozici žádné hry");
+            text.setText("There are no available games");
             return;
         }
 
         gameService.getAvailableGames().forEach((id, g) -> {
             HorizontalLayout row = new HorizontalLayout();
 
-            Button btn = new Button("Připojit se");
+            Button btn = new Button("Connect");
             btn.addClickListener(e -> this.joinGame(e, id));
 
             row.add(new Paragraph(id));

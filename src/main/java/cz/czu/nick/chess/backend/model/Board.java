@@ -33,11 +33,11 @@ public class Board {
     public Boolean canCastleH8;
     @Getter
     @Setter
-    // Клетка для взятия на проходе
+    // Passage Cage
     public Square enpassant;
     @Getter
     @Setter
-    // Счетчик для правила 50 ходов
+    // Counter for the 50-move rule
     public int drawNumber;
 
     public Board(String fen) {
