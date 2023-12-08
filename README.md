@@ -1,37 +1,38 @@
-# chess-poc ♟️️
+# StartChess ♟️️
+
+## Introduction 📖
+
+Welcome to StartChess! This player-versus-player chess game combines Vaadin's engaging UI with Spring Boot's powerful backend, offering an immersive experience for chess fans and learners alike. It's more than just a game; it's a showcase of modern web technologies in a classic, strategic context.
 
 ## Overview 🌐
 
-Chess-poc is an engaging player-versus-player chess game developed as a web application. It uses Vaadin and Spring Boot for an immersive and responsive user experience. Aimed at demonstrating the effective combination of modern web technologies with classic game logic, this project serves as an educational tool and a platform for chess enthusiasts.
+At the heart of StartChess is a commitment to simplicity and clean object-oriented programming principles. The game engine, developed in Java, utilizes a traditional 8x8 matrix to represent the chessboard, and games are managed using the [FEN notation](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation) notation. This setup is perfect for those looking to understand the intersection of classic game theory and modern programming practices.
 
-## Educational Focus and Game Engine Details 🎓
-
-The focus during development was to prioritize simplicity and clean object-oriented programming. The game engine is crafted in pure Java. The chessboard is represented as matrix (8x8) and [FEN notation](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
-
-## Application architecture
+## Application Architecture
 
 ![Application architecture](/architecture.png)
+_The architecture diagram above illustrates the modular design of StartChess._
 
 ## Testing and Validation 🧪
 
 Tehre are a series of unit tests to ensure the reliability and accuracy of the game mechanics:
 
--   Figure Move Validation
--   Board State Validation
--   Game rules validation
+-   **Figure Move Validation:** Tests each chess piece's movement according to the rules.
+-   **Board State Validation:** Ensures the board accurately reflects the current game state.
+-   **Game Rules Validation:** Verifies that standard chess rules are enforced throughout gameplay.
 
 To run tests, use `mvn test`.
 
 ## Preparing for Production 🚀
 
--   **Enable Production Mode:** Add `vaadin.productionMode` set to true in `pom.xml`.
--   **Build Frontend:** Run `mvn vaadin:build-frontend`.
--   **Create Executable Jar:** Use `mvn clean package -Pproduction` to generate `chess-1.0-SNAPSHOT.jar`
+-   **Enable Production Mode:** Set `vaadin.productionMode` to true in `pom.xml`.
+-   **Build Frontend:** Execute `mvn vaadin:build-frontend`` to prepare the front-end assets.
+-   **Create Executable Jar:** Generate `chess-1.0-SNAPSHOT.jar` with `mvn clean package -Pproduction`
 
 **Running the Application:**
 
--   The application jar is located at `./target/chess-1.0-SNAPSHOT.jar`.
--   Launch it with `java -jar chess-1.0-SNAPSHOT.jar`.
+-   Locate the application jar at `./target/chess-1.0-SNAPSHOT.jar`.
+-   Launch it using `java -jar chess-1.0-SNAPSHOT.jar`.
 
 For enhanced execution and logging:
 
