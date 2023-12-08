@@ -13,6 +13,14 @@ At the heart of StartChess is a commitment to simplicity and clean object-orient
 ![Application architecture](/architecture.png)
 _The architecture diagram above illustrates the modular design of StartChess._
 
+## Prerequisites 🛠️
+
+Before diving into StartChess, ensure you have:
+
+-   Java (preferably JDK 11 or newer) installed.
+-   Maven for managing project dependencies and builds.
+-   An IDE of your choice (optional) for editing and running the application.
+
 ## Testing and Validation 🧪
 
 Tehre are a series of unit tests to ensure the reliability and accuracy of the game mechanics:
